@@ -1,0 +1,97 @@
+﻿@using EarlyBoundTypes
+@using Portal.Models
+@using Portal.Library.Helpers
+@model Portal.Models.IncidentModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutCase.cshtml";
+}
+
+@{
+    ViewBag.Title = "Cases";
+}
+
+<h2>Cases</h2>
+
+
+<div class="row">
+    <div class="col-md-12" style="padding: 40px;">
+
+        <table class="table table-bordered table-responsive" style="margin-bottom: 20px;">
+            <thead>
+                <tr class="active" style="font-weight: 600;">
+                    <td>
+                        Klient
+                    </td>
+                    <td>
+                        Numer sprawy
+                    </td>
+                    <td>
+                        Stan sprawy
+                    </td>
+                    <td>
+                        Data utworzenia
+                    </td>
+                    <td>
+                        Data ostatniego działania
+                    </td>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (IncidentObject incident in Model.IncidentModelList)
+                {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(incident.Client, "SingleCase", "PortalNet", new { caseID = incident.ID, client = incident.Client}, null)
+                        </td>
+                        <td>
+                            @incident.Ticket
+                        </td>
+                        <td>
+                           
+
+                            @incident.State
+                        </td>
+                        <td>
+                            @incident.DateCreated
+                        </td>
+                        <td>
+                            @incident.LastActionDate
+                        </td>
+                    </tr>
+                                }
+                
+                @*@foreach(Incident incident in ViewBag.tickets)
+                {
+                    <tr>
+                        <td>
+                            @incident.CustomerId.Name
+                        </td>
+                        <td>
+                            @incident.TicketNumber
+                        </td>
+                        <td>
+                            @{ 
+                                string state = (incident.StateCode.Value == 1) ? "Aktywna" : "Nieaktywna";
+                            }
+
+                            @state
+                        </td>
+                        <td>
+                            @incident.CreatedOn.GetValueOrDefault().ToLocalTime().ToString("")
+                        </td>
+                        <td>
+                            @incident.expl_Ostatniedzialanie.GetValueOrDefault().ToLocalTime().ToString("yyy-MM-dd")
+                        </td>
+                    </tr>
+                }*@
+
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+

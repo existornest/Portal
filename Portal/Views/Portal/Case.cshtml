@@ -1,0 +1,171 @@
+﻿@using EarlyBoundTypes
+@using Portal.Library.Helpers
+@model Portal.ViewModels.CaseViewModel
+
+@{
+    ViewBag.Title = "Sprawy";
+}
+
+<h2>Sprawa</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.NumerSprawy)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.NumerSprawy)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.RodzajSzkody)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.RodzajSzkody)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.DataWplywu)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.DataWplywu)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.TypSprawy)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.TypSprawy)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Kontakt)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Kontakt)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.EtapSprawy)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.EtapSprawy)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.ZrodloSprawy)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.ZrodloSprawy)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.DatawyslaniaUmowy)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.DatawyslaniaUmowy)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Klient)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Klient)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Wlasciciel)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Wlasciciel)
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+<h2>
+    Działania
+</h2>
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <td>
+                        Temat
+                    </td>
+                    <td>
+                        Typ działania
+                    </td>
+                    <td>
+                        Data ukończenia
+                    </td>
+                    <td>
+                        Właściciel
+                    </td>
+                    <td>
+                        Opis
+                    </td>
+                </tr>
+            </thead>
+
+
+            <tbody>
+
+            @foreach (ActivityPointer item in ViewBag.Aps)
+                {
+                    <tr>
+                        <td>
+                            @item.Subject
+                        </td>
+                        <td>
+                            @CaseHelper.TypeString(item.ActivityTypeCode)
+                        </td>
+                        <td>
+                            @CaseHelper.DateString(item)
+                        </td>
+                        <td>
+                            @item.OwnerId.Name
+                        </td>
+                        <td>
+                            @item.Description
+                        </td>
+                    </tr>
+                }
+
+
+            </tbody>
+
+
+
+        </table>
+    </div>
+
+</div>
+
+

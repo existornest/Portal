@@ -1,0 +1,76 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+p{
+    font-family: Tahoma, Geneva, sans-serif, Impact;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.full-width{
+    width:100%; 
+    position: absolute;
+}
+
+
+#adv-navbar{
+    background: white;
+    background-color: white;
+    border-top: 1px solid #efe8e8;
+    
+}
+
+.adv-active{
+    border-top: 4px solid #700909;
+    background: none !important;
+}
+
+#nav-wrapper{
+    background: white;
+    margin-top: 20px;
+    border-top: 1px solid #efe8e8;
+}
+
+.adv-li-nav{
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight:500;
+    font-size: 14px;
+}
+
+.adv-own{
+    font-weight:500;
+    font-size: 16px;
+}
+
+ul li {
+    list-style-type: none;
+}
+
+li a:hover {
+    text-decoration: none;
+}
+
+i{
+    color: #808080;
+}
+

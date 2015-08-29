@@ -1,0 +1,117 @@
+﻿@using EarlyBoundTypes
+@using Portal.Library.Tree
+@{
+    ViewBag.Title = "Logowanie";
+}
+
+@if (null != TempData["info"])
+{
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3 style="color: blue;">
+                @TempData["info"]
+            </h3>
+        </div>
+
+    </div>
+
+}
+
+
+<h3>
+    @ViewBag.User
+</h3>
+
+<h1>
+    Sprawy:
+</h1>
+
+
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <table class="table table-bordered table-hover">
+
+            <thead>
+                <tr>
+                    <td>
+                        
+                        Klient
+                    </td>
+                    <td>
+                        Numer sprawy
+                    </td>
+                    <td>
+                        Stan
+                    </td>
+                    <td>
+                        Data utworzenia
+                    </td>
+                </tr>
+            </thead>
+
+            <tbody>
+                
+                @foreach (Incident inc in ViewBag.Incidents)
+                {
+                    <tr>
+                        <td>
+                            <div class="well">
+                                @Html.ActionLink(inc.CustomerId.Name, "Case", "Portal", new { caseID = inc.IncidentId.Value}, null)
+                                
+                            </div>
+                        </td>
+                        <td>
+                            <div class="well">
+                                @inc.TicketNumber
+                            </div>
+                        </td>
+                        <td>
+                            <div class="well">
+                                @{ 
+                                    string status = null;
+                                    if (inc.StateCode.Value == 1)
+                                    {
+                                        status = "Nieaktywna";
+                                    }
+                                    else
+                                    {
+                                        status = "Aktywna";
+                                    }
+                                }
+                                @status
+                            </div>
+                        </td>
+                        <td>
+                            <div class="well">
+                                @inc.CreatedOn.GetValueOrDefault().ToLocalTime().ToString("yyyy-MM-dd")
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+
+        @if(null != ViewBag.Excerpt)
+        {
+            foreach (Node item in ViewBag.Excerpt)
+            {
+                @item.Name
+            }
+        }
+
+    </div>
+</div>
+
