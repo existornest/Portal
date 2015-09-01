@@ -119,16 +119,108 @@ namespace Portal.Controllers
             //cvm.Klient = (string)Session["loggedUser"];
             cvm.Klient = new EntityReference("contact", (Guid)incident.incident_customer_contacts.ContactId).Name;
             cvm.RodzajSzkody = incident.expl_Rodzajszkody.Name;
-            cvm.Kontakt = "";
+            cvm.Kontakt = incident.CustomerId.Name;
             cvm.NumerSprawy = incident.TicketNumber;
             cvm.Wlasciciel = incident.OwnerId.Name;
             cvm.TypSprawy = getOptionSetText("incident", "expl_typsprawy", (int)incident.expl_TypSprawy);
             cvm.ZrodloSprawy = getOptionSetText("incident", "expl_zrodlosprawy", (int)incident.expl_zrodlosprawy);
+            
 
             ViewBag.Aps = aps;
+            ViewBag.Client = client;
 
             return View(cvm);
         }
+
+        // Rozliczenia sieci
+        public ActionResult NetSettlement(string caseID, string client)
+        {
+
+            if (null == caseID || null == client)
+            {
+                return HttpNotFound();
+            }
+
+            IQueryable<expl_prowizja> provisions = context.expl_prowizjaSet;
+
+            List<SelectListItem> monthsList = new List<SelectListItem>();
+
+            int currentYear = DateTime.Now.Year;
+
+            List<SelectListItem> yearsList = new List<SelectListItem>();
+
+            for (int i = (currentYear - 5), y = 1; i <= (currentYear); i++, y++)
+            {
+                if (i == currentYear)
+                {
+                    yearsList.Add(new SelectListItem() { Text = i.ToString(), Value = y.ToString(), Selected = true });
+                }
+                else
+                {
+                    yearsList.Add(new SelectListItem() { Text = i.ToString(), Value = y.ToString() });
+                }
+            }
+
+            string[] months = {
+                "Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec",
+                "Lipiec" ,"Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"
+            };
+
+            for (int i = 0; i < 12; i++)
+            {
+                if (i == 0)
+                {
+                    monthsList.Add(new SelectListItem() { Text = months[i], Value = (i + 1).ToString(), Selected = true });
+                }
+                else
+                {
+                    monthsList.Add(new SelectListItem() { Text = months[i], Value = (i + 1).ToString()});
+                }
+            }
+
+            ViewBag.Client = client;
+            ViewBag.Months = monthsList;
+            ViewBag.Years = yearsList;
+
+
+            return View();
+        }
+
+        // Rozliczenia sieci
+        [HttpPost]
+        public ActionResult NetSettlement(string guid)
+        {
+            
+
+            return View();
+        }
+
+        //Rozliczenie klienta w pojedyńczej sprawie
+        public ActionResult ClientSettlement(string caseID, string client)
+        {
+
+            IQueryable<expl_zaliczkadlaklienta> provision =
+                context.expl_zaliczkadlaklientaSet.Where(a => a.expl_Sprawa.Id.Equals(caseID));
+
+            ClientSettlementViewModel csvm = new ClientSettlementViewModel();
+
+            csvm.ClientName = client;
+
+            foreach (expl_zaliczkadlaklienta item in provision)
+            {
+                csvm.ClientSettlementsList.Add(new ClientSettlementObject()
+                {
+                    Account = item.expl_Kwota.Value,
+                    Case = item.expl_Sprawa.Name,
+                    Name = item.expl_name,
+                    ID = item.Id,
+                    Type = getOptionSetText("expl_zaliczkadlaklienta", "expl_typ", item.expl_Typ.Value)
+                });
+            }
+
+            return View(csvm);
+        }
+
 
     }
 }

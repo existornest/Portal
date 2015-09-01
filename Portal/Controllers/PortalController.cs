@@ -78,10 +78,7 @@ namespace Portal.Controllers
             context.IncidentSet
                 .Where(a => a.IncidentId.Value.Equals(caseID)).Select(row => row).FirstOrDefault();
 
-            //ActivityParty ap = new ActivityParty();
-
-            //IQueryable<expl_dokument> doc = 
-            //    context.ActivityPartySet.Select(a => a.expl_dokument_activity_parties);
+            
 
             IEnumerable<ActivityPointer> aps = incident.Incident_ActivityPointers
                .Where(c => (c.PriorityCode == 2 && c.StateCode.Value == 1 && c.ActivityTypeCode != "email"))
@@ -93,7 +90,7 @@ namespace Portal.Controllers
             cvm.EtapSprawy = getOptionSetText("incident", "incidentstagecode", (int)incident.IncidentStageCode);
             cvm.Guid = (Guid)incident.IncidentId;
             //cvm.Klient = (string)Session["loggedUser"];
-            cvm.Klient = new EntityReference("contact", (Guid)incident.incident_customer_contacts.ContactId).Name;
+            cvm.Klient = new EntityReference("contact", incident.CustomerId.Id).Name;
             cvm.RodzajSzkody = incident.expl_Rodzajszkody.Name;
             cvm.Kontakt = "";
             cvm.NumerSprawy = incident.TicketNumber;

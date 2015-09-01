@@ -3,8 +3,41 @@
     padding-bottom: 20px;
 }
 
-p{
+/*p{
     font-family: Tahoma, Geneva, sans-serif, Impact;
+}*/
+
+@font-face {
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: 300;
+    src: local("Open Sans Light"), local("OpenSans-Light"), url("http://fonts.gstatic.com/s/opensans/v13/DXI1ORHCpsQm3Vp6mXoaTegdm0LZdjqr5-oayXSOefg.woff2") format("woff2");
+}
+@font-face {
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: 400;
+    src: local("Open Sans"), local("OpenSans"), url("http://fonts.gstatic.com/s/opensans/v13/cJZKeOuBrn4kERxqtaUH3VtXRa8TVwTICgirnJhmVJw.woff2") format("woff2");
+}
+@font-face {
+    font-family: "Open Sans";
+    font-style: normal;
+    font-weight: 700;
+    src: local("Open Sans Bold"), local("OpenSans-Bold"), url("http://fonts.gstatic.com/s/opensans/v13/k3k702ZOKiLJc3WVjuplzOgdm0LZdjqr5-oayXSOefg.woff2") format("woff2");
+}
+
+a:focus {
+    outline: thin dotted;
+    text-decoration: none;
+}
+a:active, a:hover {
+    outline: 0 none;
+    text-decoration: none;
+}
+
+a{
+    text-decoration: none;
+    font-size: 1.2em;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -36,7 +69,8 @@ textarea {
 #adv-navbar{
     background: white;
     background-color: white;
-    border-top: 1px solid #efe8e8;
+    /*border-top: 1px solid #efe8e8;*/
+    border: none !important;
     
 }
 
@@ -48,7 +82,7 @@ textarea {
 #nav-wrapper{
     background: white;
     margin-top: 20px;
-    border-top: 1px solid #efe8e8;
+    /*border-top: 1px solid #efe8e8;*/
 }
 
 .adv-li-nav{
@@ -72,5 +106,24 @@ li a:hover {
 
 i{
     color: #808080;
+}
+
+.rn-margin-top-20{
+    margin-top: 20px;
+}
+
+.rn-margin-top-100{
+    margin-top: 100px;
+}
+
+.hr-gradient{ 
+    border: 0; 
+    height: 1px; 
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0)); 
+
+}
+
+.btn-info{
+    background-color: #be4846 !important;
 }
 
