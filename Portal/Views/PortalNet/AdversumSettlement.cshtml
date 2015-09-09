@@ -1,0 +1,159 @@
+﻿
+@using EarlyBoundTypes
+@using Portal.ViewModels
+
+@model Portal.ViewModels.AdversumSettlementViewModel
+
+@{
+    ViewBag.Title = "AdversumSettlement";
+    Layout = "~/Views/Shared/_LayoutAdversumSettlement.cshtml";
+
+    int counter = 1;
+
+}
+
+<h2>Rozliczenia Adversum - @ViewBag.FullName</h2>
+
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        @using (Html.BeginForm())
+        {
+
+            Html.Hidden("full", (string)ViewBag.FullName);
+
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.DropDownList("Months", null, new { @class = "form-control" })
+                </div>
+
+                <div class="col-md-2 col-md-offset-1">
+                    @Html.DropDownList("Years", null, new { @class = "form-control" })
+                </div>
+
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="col-md-2">
+                    <input type="submit" class="btn btn-info" value="Szukaj" name="search" />
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+
+    
+</div>
+
+<div class="row">
+
+    <div class="col-md-12" style="margin-top: 20px;">
+
+        <div class="well" style="padding:10px;">
+             <h4>
+            Podsumowanie: 
+                 <span style="font-weight:800;">
+                 @Model.Summarize.ToString("C")
+                 </span>
+             </h4>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-12" style="margin-bottom:20px;margin-top:20px; padding:20px;padding-right: 40px;">
+
+        @if (Model.AdversumSettlmentsList.Count > 0)
+        {
+
+            <table class="table table-bordered">
+
+                <thead>
+                    <tr>
+                        <td>
+                            Nr
+                        </td>
+                        <td>
+                            Tytułem
+                        </td>
+                        <td>
+                            Sprawa
+                        </td>
+                        <td>
+                            Kwota
+                        </td>
+                        <td>
+                            Data
+                        </td>
+                        <td>
+                            Zaliczka rozliczana
+                        </td>
+
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (AdversumSettlementObject item in Model.AdversumSettlmentsList)
+                    {
+                        <tr>
+                            <td>
+                                @counter
+                            </td>
+                            <td>
+                                @item.Source
+                            </td>
+
+                            <td>
+                                @item.Case
+                            </td>
+
+                            <td>
+                                @item.Account.ToString("C")
+                            </td>
+
+                            <td>
+                                @item.DateOf
+                            </td>
+
+                            <td>
+                                @item.AdvancePayment
+                            </td>
+
+                        </tr>
+                        counter++;
+                    }
+
+                </tbody>
+
+            </table>
+
+        }
+        else
+        {
+            <div class="row">
+
+                <div class="col-md-6 col-md-offset-3 text-center">
+
+                    <h3>
+                        BRAK DANYCH
+                    </h3>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+

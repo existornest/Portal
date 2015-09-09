@@ -28,11 +28,16 @@
 
                             <ul class="nav navbar-nav pull-right" style="height: 100px;">
 
-                                <li class="adv-li-nav adv-active"><a href="#">Home</a></li>
-                                <li class="adv-li-nav"><a href="#">O nas</a></li>
-                                <li class="adv-li-nav"><a href="#">Cennik</a></li>
-                                <li class="adv-li-nav"><a href="#">Kontakt</a></li>
-                                <li class="adv-li-nav"><a href="#">Napisz do nas</a></li>
+                                <li class="adv-li-nav adv-active"><a href="/">Home</a></li>
+                                
+                                <li class="adv-li-nav">
+                                    @Html.ActionLink("Sprawy", "Index", "PortalNet", new { @class = "" }, null)
+                                </li>
+
+                                <li class="adv-li-nav">
+                                    @Html.ActionLink("Rozliczenia Sieci", "AdversumSettlementEntry", "PortalNet", new { @class = "" }, null)
+                                </li>
+                                
 
                                 @if (null == Session["loggedUser"])
                                 {
@@ -106,10 +111,49 @@
 
 
 
-            <hr />
-            <footer>
-                <p>&copy; @DateTime.Now.Year - Portal Adversum Application</p>
-            </footer>
+
+            <hr class="hr-gradient" />
+
+            <div class="row">
+                <div id="adv-footer" class="col-md-12 text-center">
+                    <h2 class="text-shadowed">
+                        &copy; @DateTime.Now.Year - Portal Adversum Application
+                    </h2>
+
+                    <div class="row">
+
+                        <div class="col-md-6 col-md-offset-3">
+
+                            <p>
+                                Adversum Sp. z o.o.
+                            </p>
+                            <p>
+                                ul. Bajońska 13 lok. 14,
+                            </p>
+                            <p>
+                                03-963 Warszawa
+                            </p>
+                            <p>
+                                0 801 011 490
+                            </p>
+                            <p>
+                                22 616 40 77
+                            </p>
+                            <p>
+                                info@adversum.pl
+                            </p>
+
+
+
+
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
 
 
         </div>

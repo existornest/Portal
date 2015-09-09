@@ -3,14 +3,28 @@
 @model Portal.ViewModels.CaseViewModel
 
 @{
-    ViewBag.Title = "Sprawy";
+    ViewBag.Title = "Sprawa";
 }
 
-<h2>Sprawa</h2>
+<div class="row">
+
+    <div class="col-md-10 col-md-offset-1">
+
+        <h2>
+            Sprawa @Model.Klient
+        </h2>
+
+
+    </div>
+
+</div>
+
 
 <div class="row">
     <div class="col-md-10 col-md-offset-1">
         <table class="table table-bordered">
+
+
             <tr>
                 <td>
                     @Html.DisplayNameFor(model => model.NumerSprawy)
@@ -105,15 +119,25 @@
     </div>
 </div>
 
-<h2>
-    Działania
-</h2>
+<div class="row">
+
+    <div class="col-md-10 col-md-offset-1">
+
+        <h2>
+            Działania
+        </h2>
+
+
+    </div>
+
+</div>
+
 
 <div class="row">
 
     <div class="col-md-10 col-md-offset-1">
 
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <td>
@@ -137,7 +161,7 @@
 
             <tbody>
 
-            @foreach (ActivityPointer item in ViewBag.Aps)
+                @foreach (ActivityPointer item in ViewBag.Aps)
                 {
                     <tr>
                         <td>

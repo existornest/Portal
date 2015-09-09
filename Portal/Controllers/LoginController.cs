@@ -85,22 +85,26 @@ namespace Portal.Controllers
                     Session["guid"] = user.ContactId;
                     Session["userName"] = user.FullName;
 
-                    string treeExcerpt = "";
-                    
-                    try
-                    {
-                        CreateTree ct = new CreateTree(context);
-                        treeExcerpt = ct.Render(Session["guid"].ToString());
-                        Session["tree"] = treeExcerpt;
-                    }
-                    catch
-                    {
-                        TempData["loginError"] = "Błędy logowania.";
-                        Session.RemoveAll();
-                        return RedirectToAction("Index");
-                    }
+                    string check = "";
 
-                    if(treeExcerpt != "")
+                    CreateTree ct = new CreateTree(context, (Guid)user.ContactId);
+                    Session["tree"] = check = ct.Html;
+
+                    CreateTreeAdversumSettlement ctas = new CreateTreeAdversumSettlement(context, (Guid)user.ContactId);
+                    Session["treeAS"] = ctas.Html;
+
+                    //try
+                    //{
+                        
+                    //}
+                    //catch
+                    //{
+                    //    TempData["loginError"] = "Błędy logowania.";
+                    //    Session.RemoveAll();
+                    //    return RedirectToAction("Index");
+                    //}
+
+                    if (check != "")
                     {
                         Session["netUser"] = 1;
                         TempData["info"] = "Logowanie poprawne.";

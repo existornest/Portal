@@ -11,15 +11,32 @@
     ViewBag.Title = "Cases";
 }
 
-<h2>Cases</h2>
+
+
+@{
+    int counter = 1;
+}
 
 
 <div class="row">
-    <div class="col-md-12" style="padding: 40px;">
+
+    <div class="col-md-10 col-md-offset-1">
+
+        <h2>Lista spraw</h2>
+
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
 
         <table class="table table-bordered table-responsive" style="margin-bottom: 20px;">
             <thead>
-                <tr class="active" style="font-weight: 600;">
+                <tr>
+                    <td>
+                        Nr
+                    </td>
                     <td>
                         Klient
                     </td>
@@ -44,13 +61,16 @@
                 {
                     <tr>
                         <td>
-                            @Html.ActionLink(incident.Client, "SingleCase", "PortalNet", new { caseID = incident.ID, client = incident.Client}, null)
+                            @counter
+                        </td>
+                        <td>
+                            @Html.ActionLink(incident.Client, "SingleCase", "PortalNet", new { caseID = incident.ID, client = incident.Client }, null)
                         </td>
                         <td>
                             @incident.Ticket
                         </td>
                         <td>
-                           
+
 
                             @incident.State
                         </td>
@@ -61,32 +81,13 @@
                             @incident.LastActionDate
                         </td>
                     </tr>
-                                }
-                
-                @*@foreach(Incident incident in ViewBag.tickets)
-                {
-                    <tr>
-                        <td>
-                            @incident.CustomerId.Name
-                        </td>
-                        <td>
-                            @incident.TicketNumber
-                        </td>
-                        <td>
-                            @{ 
-                                string state = (incident.StateCode.Value == 1) ? "Aktywna" : "Nieaktywna";
-                            }
 
-                            @state
-                        </td>
-                        <td>
-                            @incident.CreatedOn.GetValueOrDefault().ToLocalTime().ToString("")
-                        </td>
-                        <td>
-                            @incident.expl_Ostatniedzialanie.GetValueOrDefault().ToLocalTime().ToString("yyy-MM-dd")
-                        </td>
-                    </tr>
-                }*@
+                    
+                        counter++;
+                   
+                        }
+
+                
 
             </tbody>
 

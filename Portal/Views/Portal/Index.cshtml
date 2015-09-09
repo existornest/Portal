@@ -1,39 +1,56 @@
 ﻿@using EarlyBoundTypes
 @using Portal.Library.Tree
 @{
-    ViewBag.Title = "Logowanie";
+    ViewBag.Title = "Sprawy";
 }
 
-@if (null != TempData["info"])
-{
 
-    <div class="row">
-        <div class="col-md-12">
-            <h3 style="color: blue;">
-                @TempData["info"]
-            </h3>
-        </div>
+<div class="row">
+
+    <div class="col-md-10 col-md-offset-1 text-center">
+
+        @if (null != TempData["info"])
+        {
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 style="color: blue;">
+                        @TempData["info"]
+                    </h3>
+                </div>
+
+            </div>
+
+        }
 
     </div>
 
-}
-
-
-<h3>
-    @ViewBag.User
-</h3>
-
-<h1>
-    Sprawy:
-</h1>
+</div>
 
 
 
 <div class="row">
 
-    <div class="col-md-12">
+    <div class="col-md-10 col-md-offset-1" style="margin-top: 20px; margin-bottom: 20px;">
 
-        <table class="table table-bordered table-hover">
+        <h3>
+           Sprawy @ViewBag.User
+        </h3>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+<div class="row">
+
+    <div class="col-md-10 col-md-offset-1" style="margin-top: 20px; margin-bottom: 20px;">
+
+        <table class="table table-bordered">
 
             <thead>
                 <tr>
@@ -60,7 +77,7 @@
                     <tr>
                         <td>
                             <div class="well">
-                                @Html.ActionLink(inc.CustomerId.Name, "Case", "Portal", new { caseID = inc.IncidentId.Value}, null)
+                                @Html.ActionLink(inc.CustomerId.Name, "Case", "Portal", new { caseID = inc.IncidentId.Value, client = ViewBag.User }, null)
                                 
                             </div>
                         </td>

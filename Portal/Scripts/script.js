@@ -24,23 +24,16 @@ $(document).ready(function () {
 
 
     $folder = $("i");
+    var current;
 
-    var visible = true;
+    $($folder).click(function () {
+        
+        var li = $(this).parent();
+        var liChildren = $(li).children("ul");
 
-    $folder.click(function () {
-
-        if(visible)
-        {
-            //alert("HIDE");
-            $(this).find("li").children().hide(1000);
-            visible = false;
-        }
-        else {
-            //alert("OPEN");
-            $(this).find("li").children().show(1000);
-            visible = true;
-        }
-
+        
+        liChildren.toggle();
+        li.show();
         
     });
 

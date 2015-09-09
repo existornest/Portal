@@ -18,8 +18,10 @@ namespace Portal.Controllers
         public ActionResult Index()
         {
 
-            //CreateTree ct = new CreateTree(context);
-            ViewBag.Html = Session["tree"];
+           //CreateTree ct = new CreateTree(context);
+           // ViewBag.Html = ct.Render();
+
+            //ViewBag.Html = Session["tree"];
             
 
             return View();

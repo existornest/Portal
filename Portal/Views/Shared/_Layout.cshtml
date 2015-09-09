@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="~/Content/font-awesome.min.css">
 
-    <title>@ViewBag.Title - Portal Adversum Application</title>
+    <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -27,17 +27,37 @@
                         </li>
                     </ul>
 
-                    <ul class="nav navbar-nav pull-right" style="height: 100px;">
-                        <li class="adv-li-nav adv-active"><a href="/">Home</a></li>
-                        <li class="adv-li-nav"><a href="#">O nas</a></li>
-                        <li class="adv-li-nav"><a href="#">Cennik</a></li>
-                        <li class="adv-li-nav"><a href="#">Kontakt</a></li>
-                        <li class="adv-li-nav"><a href="#">Napisz do nas</a></li>
+                    <ul class="nav navbar-nav pull-right" style="height: 100px;margin-right: 10px;">
+
+                        @if (ViewBag.Title != "Strona Główna")
+                        {
+                            <li class="adv-li-nav adv-active"><a href="/">Home</a></li>
+                        }
+
+
+                        @if (null != Session["loggedUser"] 
+                            && ViewContext.RouteData.Values["controller"].ToString() == "Portal" 
+                            && ViewContext.RouteData.Values["action"].ToString() != "Index")
+                        {
+                            <li>
+                                @Html.ActionLink("Sprawy", "Index", "Portal")
+                            </li>
+                        }
+
+                        @if (null != Session["loggedUser"])
+                        {
+                            <li class="adv-li-nav">@Html.ActionLink("Instrukcja", "Instruction", "Portal")</li>
+                            
+                        }
+
+                       
+                        
 
                         @if (null != Session["loggedUser"])
                         {
                             <li class="adv-li-nav">@Html.ActionLink("WYLOGUJ", "LogOut", "Login")</li>
                         }
+                        
 
                     </ul>
 
@@ -59,7 +79,7 @@
         {
             <div class="row">
                 <div class="col-md-6 col-md-offset-3 text-center rn-margin-top-100">
-                    <h2>
+                    <h2 class="text-shadowed-dark">
                         Witamy w portalu Klienta Adversum
                     </h2>
                 </div>
@@ -67,11 +87,11 @@
             </div>
         }
 
-        
+
 
         <div class="row">
             <div class="col-md-12" style="margin-top: 10px;">
-                <ol class="breadcrumb">
+                <ol class="breadcrumb well">
 
 
                     @if (ViewContext.RouteData.Values["controller"].ToString() != "Home")
@@ -92,17 +112,58 @@
             </div>
         </div>
 
+        <div class="row">
 
+            <div class="col-md-12">
 
-        @RenderBody()
+                @RenderBody()
+
+            </div>
+
+        </div>
+
+        
 
         <hr class="hr-gradient" />
 
         <div class="row">
-            <div class="col-md-4 col-md-offset-4 text-center">
-                <h2>
+            <div id="adv-footer" class="col-md-12 text-center">
+                <h2 class="text-shadowed">
                     &copy; @DateTime.Now.Year - Portal Adversum Application
                 </h2>
+
+                <div class="row">
+
+                    <div class="col-md-6 col-md-offset-3">
+
+                        <p>
+                            Adversum Sp. z o.o.
+                        </p>
+                        <p>
+                            ul. Bajońska 13 lok. 14,
+                        </p>
+                        <p>
+                            03-963 Warszawa
+                        </p>
+                        <p>
+                            0 801 011 490
+                        </p>
+                        <p>
+                            22 616 40 77
+                        </p>
+                        <p>
+                            info@adversum.pl
+                        </p>
+
+
+
+
+
+
+                    </div>
+
+                </div>
+
             </div>
         </div>
     </div>

@@ -197,6 +197,7 @@
     <Compile Include="Library\Helpers\CaseHelper.cs" />
     <Compile Include="Library\PasswordHash.cs" />
     <Compile Include="Library\Tree\CreateTree.cs" />
+    <Compile Include="Library\Tree\CreateTreeAdversumSettlement.cs" />
     <Compile Include="Library\Tree\Node.cs" />
     <Compile Include="Library\Tree\Tree.cs" />
     <Compile Include="Library\Xrm.cs" />
@@ -208,8 +209,11 @@
     <Compile Include="Models\Reset.cs" />
     <Compile Include="Models\ResetContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\AdversumSettlementViewModel.cs" />
     <Compile Include="ViewModels\CaseViewModel.cs" />
     <Compile Include="ViewModels\ClientSettlementViewModel.cs" />
+    <Compile Include="ViewModels\NetSettlementViewModel.cs" />
+    <Compile Include="ViewModels\SummonsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -229,6 +233,7 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="App_Data\instrukcja.doc" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -277,10 +282,12 @@
     <Content Include="Views\PortalNet\SingleCase.cshtml" />
     <Content Include="Views\PortalNet\NetSettlement.cshtml" />
     <Content Include="Views\PortalNet\ClientSettlement.cshtml" />
+    <Content Include="Views\PortalNet\Summons.cshtml" />
+    <Content Include="Views\PortalNet\AdversumSettlement.cshtml" />
+    <Content Include="Views\Shared\_LayoutAdversumSettlement.cshtml" />
+    <Content Include="Views\PortalNet\AdversumSettlementEntry.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
