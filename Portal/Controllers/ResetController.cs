@@ -26,19 +26,19 @@ namespace Portal.Controllers
         //}
 
         // GET: Resets/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Reset reset = db.ResetModelContext.Find(id);
-            if (reset == null)
-            {
-                return HttpNotFound();
-            }
-            return View(reset);
-        }
+        //public ActionResult Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Reset reset = db.ResetModelContext.Find(id);
+        //    if (reset == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(reset);
+        //}
 
         // GET: Reset/Index
         public ActionResult Index()
@@ -63,7 +63,7 @@ namespace Portal.Controllers
                 {
                     TempData["loginError"] = "Nie ma takiego użytkownika.";
                     Session["loggedUser"] = null;
-                    return RedirectToAction("Index", "Login");
+                    return RedirectToAction("Index", "Home");
                 }
 
                 PasswordHash pHash = PasswordHash.Create(reset.Password);
@@ -104,14 +104,14 @@ namespace Portal.Controllers
                         smtp.Send(message);
 
                         TempData["info"] = "Potwierdzajacy email został wysłany na podany adres email.";
-                        return RedirectToAction("Index", "Login");
+                        return RedirectToAction("Index", "Home");
                     }
 
                 }
                 catch(Exception e)
                 {
                     TempData["loginError"] = "Wystąpił błąd. Skontaktuj się z administracją.";
-                    return RedirectToAction("Index", "Login");
+                    return RedirectToAction("Index", "Home");
                 }
 
 
@@ -157,7 +157,7 @@ namespace Portal.Controllers
                 Session[id + "_hash"] = null;
 
                 TempData["loginError"] = "Wystąpił błąd. Skontaktuj się z Administracją.";
-                return RedirectToAction("Index", "Login");
+                return RedirectToAction("Index", "Home");
             }
 
             Session[id] = null;
@@ -165,39 +165,39 @@ namespace Portal.Controllers
             Session[id + "_hash"] = null;
 
             TempData["info"] = "Hasło zostało zmienione.";
-            return RedirectToAction("Index", "Login");
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Resets/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Reset reset = db.ResetModelContext.Find(id);
-            if (reset == null)
-            {
-                return HttpNotFound();
-            }
-            return View(reset);
-        }
+        //public ActionResult Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Reset reset = db.ResetModelContext.Find(id);
+        //    if (reset == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(reset);
+        //}
 
         // POST: Resets/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,UserName,Password,ConfirmPassword")] Reset reset)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(reset).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(reset);
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit([Bind(Include = "ID,UserName,Password,ConfirmPassword")] Reset reset)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Entry(reset).State = EntityState.Modified;
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(reset);
+        //}
 
         // GET: Resets/Delete/5
         public ActionResult Delete(int? id)

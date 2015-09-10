@@ -21,30 +21,26 @@ namespace Portal.Controllers
         private LoginModelContext db = new LoginModelContext();
         protected XrmServiceContext context = new ConnectionContext().XrmContext;
 
-        //// GET: LoginModels
-        //public ActionResult Index()
+        
+        //public ActionResult Details(int? id)
         //{
-        //    return View(db.LoginModels.ToList());
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    LoginModel loginModel = db.LoginModels.Find(id);
+        //    if (loginModel == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(loginModel);
         //}
-
-        // GET: LoginModels/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            LoginModel loginModel = db.LoginModels.Find(id);
-            if (loginModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(loginModel);
-        }
 
         // GET: Login/Index
         public ActionResult Index()
         {
+            
+
             return View();
         }
 
@@ -55,6 +51,12 @@ namespace Portal.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Index([Bind(Include = "ID,UserName,Password")] LoginModel loginModel)
         {
+
+
+            //int contact = (int)Session["isContact"];
+
+            //Debugger.Break();
+
             if (ModelState.IsValid)
             {
 
@@ -135,7 +137,7 @@ namespace Portal.Controllers
             Session["guid"] = null;
             Session.RemoveAll();
             TempData["info"] = "Wylogowano poprawnie.";
-            return RedirectToAction("Index", "Login");
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: LoginModels/Edit/5

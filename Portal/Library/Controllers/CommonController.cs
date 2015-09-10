@@ -18,7 +18,7 @@ namespace Portal.Library.Controllers
             if (null == Session["loggedUser"])
             {
                 TempData["loginError"] = "Zaloguj się lub zarejestruj.";
-                filterContext.Result = new RedirectResult("/Login");
+                filterContext.Result = new RedirectResult("/Home");
             }
             
         }

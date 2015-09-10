@@ -69,6 +69,8 @@
       <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.SharePoint.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.SharePoint.Client.Runtime, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Xrm.Client, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CrmSdk.Extensions.7.1.0\lib\net45\Microsoft.Xrm.Client.dll</HintPath>
       <Private>True</Private>
@@ -212,7 +214,10 @@
     <Compile Include="ViewModels\AdversumSettlementViewModel.cs" />
     <Compile Include="ViewModels\CaseViewModel.cs" />
     <Compile Include="ViewModels\ClientSettlementViewModel.cs" />
+    <Compile Include="ViewModels\DocumentsViewModel.cs" />
+    <Compile Include="ViewModels\IncidentsViewModel.cs" />
     <Compile Include="ViewModels\NetSettlementViewModel.cs" />
+    <Compile Include="ViewModels\PoliciesViewModel.cs" />
     <Compile Include="ViewModels\SummonsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -286,6 +291,8 @@
     <Content Include="Views\PortalNet\AdversumSettlement.cshtml" />
     <Content Include="Views\Shared\_LayoutAdversumSettlement.cshtml" />
     <Content Include="Views\PortalNet\AdversumSettlementEntry.cshtml" />
+    <Content Include="Views\Portal\Documents.cshtml" />
+    <Content Include="Views\Portal\Policies.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

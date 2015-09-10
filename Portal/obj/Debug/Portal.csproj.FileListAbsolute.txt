@@ -110,3 +110,5 @@ C:\Users\rnest\Documents\Visual Studio 2015\Projects\PortalAdversum\Portal\bin\N
 C:\Users\rnest\Documents\Visual Studio 2015\Projects\PortalAdversum\Portal\obj\Debug\Portal.dll
 C:\Users\rnest\Documents\Visual Studio 2015\Projects\PortalAdversum\Portal\obj\Debug\Portal.pdb
 C:\Users\rnest\Documents\Visual Studio 2015\Projects\PortalAdversum\Portal\obj\Debug\Portal.csprojResolveAssemblyReference.cache
+C:\Users\rnest\Documents\Visual Studio 2015\Projects\PortalAdversum\Portal\bin\Microsoft.SharePoint.Client.dll
+C:\Users\rnest\Documents\Visual Studio 2015\Projects\PortalAdversum\Portal\bin\Microsoft.SharePoint.Client.Runtime.dll

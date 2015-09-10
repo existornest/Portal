@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    
 }
 
 /*p{
@@ -196,12 +197,22 @@ li.switch a {
 }
 
 #adv-footer {
-    background-color: rgb(51, 46, 46);
-    color: rgb(116, 108, 108);
-    min-height: 100px;
+    
+    margin-bottom: -10px;
+    background-color: white;
+    min-height: 100%;
     padding-top: 20px;
     padding-bottom: 20px;
 }
+
+#adv-footer p{
+    color: black !important;
+}
+
+#adv-footer h2{
+    color: #666666 !important;
+}
+
 
 .form-control:focus {
     border-color: #be4846 !important;
@@ -269,3 +280,40 @@ thead{
     color: white;
     font-weight: 600;
 }
+
+.std-margin-top{
+    margin-top: 20px;
+}
+
+.std-margin-bottom{
+    margin-bottom: 20px;
+}
+
+.super-margin-top{
+    margin-top: 150px;
+}
+
+.super-margin-bottom{
+    margin-bottom: 150px;
+}
+
+.table-responsive-force {
+    width: 100%;
+    margin-bottom: 15px;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    border: 1px solid #DDD;
+    -webkit-overflow-scrolling: touch;
+}
+
+.huge-text{
+    font-weight: 900;
+    color: #ded9d9 !important;
+    font-size: 65px;
+    letter-spacing: 8px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+
