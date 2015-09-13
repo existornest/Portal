@@ -9,6 +9,10 @@ using Portal.ViewModels;
 using Portal.Models;
 using Microsoft.Xrm.Sdk;
 using System.Diagnostics;
+using System.Security;
+using Microsoft.SharePoint.Client;
+using System.IO;
+using Microsoft.Crm.Sdk.Messages;
 
 namespace Portal.Controllers
 {
@@ -45,9 +49,9 @@ namespace Portal.Controllers
                 case "Dyrektor Regionu":
                     tickets = context
                         .IncidentSet.Where(a => a.expl_DyrektorRegionu.Id == new Guid(guid))
-                        .OrderBy(a => a.expl_Ostatniedzialanie)
+                        .OrderByDescending(a => a.expl_Ostatniedzialanie)
                         .Select(a => a);
-                    //Session["AD"] = guid;
+
                     break;
                 case "Dyrektor Sprzedaży":
 
@@ -57,7 +61,7 @@ namespace Portal.Controllers
                         .IncidentSet
                         .Where(a => a.expl_DyrektorRegionu.Id == new Guid(ad))
                         .Where(a => a.expl_DyrSprzedazy.Id == new Guid(guid))
-                        .OrderBy(a => a.expl_Ostatniedzialanie)
+                        .OrderByDescending(a => a.expl_Ostatniedzialanie)
                         .Select(a => a);
                     }
                     else
@@ -65,10 +69,10 @@ namespace Portal.Controllers
                         tickets = context
                         .IncidentSet
                         .Where(a => a.expl_DyrSprzedazy.Id == new Guid(guid))
-                        .OrderBy(a => a.expl_Ostatniedzialanie)
+                        .OrderByDescending(a => a.expl_Ostatniedzialanie)
                         .Select(a => a);
                     }
-                    //Session["SD"] = guid;
+
                     break;
                 case "Koordynator":
 
@@ -79,7 +83,7 @@ namespace Portal.Controllers
                         .Where(a => (a.expl_DyrektorRegionu.Id == new Guid(ad)))
                         .Where(a => (a.expl_DyrSprzedazy.Id == new Guid(sd)))
                         .Where(a => (a.expl_Koordynator.Id == new Guid(guid)))
-                        .OrderBy(a => a.expl_Ostatniedzialanie)
+                        .OrderByDescending(a => a.expl_Ostatniedzialanie)
                         .Select(a => a);
                     }
                     else if (null == ad && null != sd)
@@ -88,7 +92,7 @@ namespace Portal.Controllers
                         .IncidentSet
                         .Where(a => (a.expl_DyrSprzedazy.Id == new Guid(sd)))
                         .Where(a => (a.expl_Koordynator.Id == new Guid(guid)))
-                        .OrderBy(a => a.expl_Ostatniedzialanie)
+                        .OrderByDescending(a => a.expl_Ostatniedzialanie)
                         .Select(a => a);
                     }
                     else
@@ -96,10 +100,10 @@ namespace Portal.Controllers
                         tickets = context
                         .IncidentSet
                         .Where(a => (a.expl_Koordynator.Id == new Guid(guid)))
-                        .OrderBy(a => a.expl_Ostatniedzialanie)
+                        .OrderByDescending(a => a.expl_Ostatniedzialanie)
                         .Select(a => a);
                     }
-                    //Session["CD"] = guid;
+
                     break;
                 case "Konsultant":
 
@@ -111,7 +115,7 @@ namespace Portal.Controllers
                         .Where(a => (a.expl_DyrSprzedazy.Id == new Guid(sd)))
                         .Where(a => (a.expl_Koordynator.Id == new Guid(cd)))
                         .Where(a => (a.expl_Konsultant.Id == new Guid(guid)))
-                        .OrderBy(a => a.expl_Ostatniedzialanie)
+                        .OrderByDescending(a => a.expl_Ostatniedzialanie)
                         .Select(a => a);
                     }
                     else if (null == ad && null != sd && null != cd)
@@ -121,7 +125,7 @@ namespace Portal.Controllers
                         .Where(a => (a.expl_DyrSprzedazy.Id == new Guid(sd)))
                         .Where(a => (a.expl_Koordynator.Id == new Guid(cd)))
                         .Where(a => (a.expl_Konsultant.Id == new Guid(guid)))
-                        .OrderBy(a => a.expl_Ostatniedzialanie)
+                        .OrderByDescending(a => a.expl_Ostatniedzialanie)
                         .Select(a => a);
                     }
                     else if (null == ad && null == sd && null != cd)
@@ -130,18 +134,19 @@ namespace Portal.Controllers
                         .IncidentSet
                         .Where(a => (a.expl_Koordynator.Id == new Guid(cd)))
                         .Where(a => (a.expl_Konsultant.Id == new Guid(guid)))
-                        .OrderBy(a => a.expl_Ostatniedzialanie)
+                        .OrderByDescending(a => a.expl_Ostatniedzialanie)
                         .Select(a => a);
                     }
+
                     else
                     {
                         tickets = context
                         .IncidentSet
                         .Where(a => (a.expl_Konsultant.Id == new Guid(guid)))
-                        .OrderBy(a => a.expl_Ostatniedzialanie)
+                        .OrderByDescending(a => a.expl_Ostatniedzialanie)
                         .Select(a => a);
                     }
-                    //Session["CO"] = guid;
+
                     break;
                 default:
                     break;
@@ -166,7 +171,7 @@ namespace Portal.Controllers
             ViewBag.Html = Session["tree"];
             ViewBag.Guid = guid;
             ViewBag.advFunction = advFunction;
-            ViewBag.Tickets = tickets;
+            //ViewBag.Tickets = tickets;
 
             return View(im);
         }
@@ -448,7 +453,11 @@ namespace Portal.Controllers
             IQueryable<expl_prowizja> provisionSet = context.expl_prowizjaSet;
             IQueryable<expl_prowizja> filteredResult = null;
 
-            DateTime selectedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            DateTime dtNow = (DateTime)GetPolishDateTimeNow();
+
+            DateTime selectedDate = new DateTime(dtNow.Year, dtNow.Month, 1, 0, 0, 0);
+            DateTime selectedDateMax =
+                new DateTime(dtNow.Year, dtNow.Month, DateTime.DaysInMonth(dtNow.Year, dtNow.Month), 23, 59, 59);
 
             switch (advFunction)
             {
@@ -456,54 +465,39 @@ namespace Portal.Controllers
 
                     filteredResult =
                         provisionSet.Where(a => a.expl_DyrektorRegionu.Id == new Guid(guid))
-                        //.Where(a => a.expl_Kontakt.Id == (Guid)Session["guid"])
-                        .Where(a => a.expl_Data.Value > selectedDate);
+                            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+                            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
 
                     break;
                 case "Dyrektor Sprzedaży":
 
                     filteredResult =
                         provisionSet.Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(guid))
-                        //.Where(a => a.expl_Kontakt.Id == (Guid)Session["guid"])
-                        .Where(a => a.expl_Data.Value > selectedDate);
+                        .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+                            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
 
                     break;
                 case "Koordynator":
 
                     filteredResult =
                         provisionSet.Where(a => a.expl_Koordynator.Id == new Guid(guid))
-                        //.Where(a => a.expl_Kontakt.Id == (Guid)Session["guid"])
-                        .Where(a => a.expl_Data.Value > selectedDate);
+                        .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+                            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
 
                     break;
                 case "Konsultant":
 
                     filteredResult =
                         provisionSet.Where(a => a.expl_Konsultant.Id == new Guid(guid))
-                        //.Where(a => a.expl_Kontakt.Id == (Guid)Session["guid"])
-                        .Where(a => a.expl_Data.Value > selectedDate);
+                        .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+                            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
 
                     break;
                 default:
                     break;
             }
 
-            // if (a.expl_ProwizjaRozliczana != null)
-            // {
-            //     var zaliczka = xrm.expl_prowizjaSet
-            //.Where(c => ((c.Id == a.expl_ProwizjaRozliczana.Id)));
-
-            //     foreach (expl_prowizja b in zaliczka)
-            //     {
-            //         cell.Text = b.expl_Sprawa.Name.ToString();
-            //     }
-
-            // }
-            // else
-            // {
-            //     cell.Text = "";
-            // }
-
+            
             AdversumSettlementViewModel asvm = new AdversumSettlementViewModel();
 
             asvm.Summarize = 0;
@@ -513,20 +507,31 @@ namespace Portal.Controllers
 
                 asvm.Summarize += item.expl_Kwota.Value;
 
+                Guid accountGuid = Guid.Empty;
+
+                if (item.expl_ProwizjaRozliczana != null)
+                {
+                    foreach (IQueryable<expl_prowizja> p in context.expl_prowizjaSet)
+                    {
+                        accountGuid = p.Where(b => b.expl_ProwizjaRozliczana.Id == item.expl_Sprawa.Id)
+                            .Select(b => b.expl_zaliczka.Id).FirstOrDefault();
+                    }
+                }
+
                 asvm.AdversumSettlmentsList.Add(new AdversumSettlementObject()
                 {
                     Account = (Decimal)item.expl_Kwota,
                     Case = item.expl_Sprawa != null ? item.expl_Sprawa.Name : "",
                     DateOf = item.expl_Data.Value.ToLocalTime().ToString("yyyy-MM-dd"),
-                    //AdvancePayment = item.expl_ProwizjaRozliczana != null ? new EntityReference("expl_zaliczka", "expl_sprawa", item.expl_zaliczka.Id).Name : "",
+                    //AdvancePayment = new EntityReference("", accountGuid).
                     Source = item.expl_Tytulem.HasValue ? getOptionSetText("expl_prowizja", "expl_tytulem", item.expl_Tytulem.Value) : "",
                 });
 
             }
-
+            
             List<SelectListItem> monthsList = new List<SelectListItem>();
 
-            int currentYear = DateTime.Now.Year;
+            int currentYear = dtNow.Year;
 
             List<SelectListItem> yearsList = new List<SelectListItem>();
 
@@ -591,14 +596,12 @@ namespace Portal.Controllers
                 "Lipiec" ,"Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"
             };
 
-            DateTime selectedDate = new DateTime(yearsArr[Convert.ToInt16(Years) - 1], Convert.ToInt16(Months), 1);
+            DateTime selectedDate = new DateTime(yearsArr[Convert.ToInt16(Years) - 1], Convert.ToInt16(Months), 1, 0, 0, 0);
 
-            //int daysNum = DateTime.DaysInMonth(yearsArr[Convert.ToInt16(Years) - 1], (Convert.ToInt16(Months) + 1));
-            //int monthNum = (Convert.ToInt16(Months) + 1);
-            //int yearNum = yearsArr[Convert.ToInt16(Years) - 1];
+            DateTime selectedDateMax =
+                new DateTime(selectedDate.Year, selectedDate.Month, DateTime.DaysInMonth(selectedDate.Year, selectedDate.Month), 23, 59, 59);
 
-            DateTime selectedDateMax = 
-                new DateTime(selectedDate.Year, selectedDate.Month, DateTime.DaysInMonth(selectedDate.Year, selectedDate.Month));
+            //Debugger.Break();
 
             List<SelectListItem> yearsList = new List<SelectListItem>();
 
@@ -638,32 +641,32 @@ namespace Portal.Controllers
 
                         filteredResult =
                             provisionSet.Where(a => a.expl_DyrektorRegionu.Id == new Guid(guid))
-                            .Where(a => a.expl_Data.Value < selectedDateMax)
-                            .Where(a => a.expl_Data.Value > selectedDate);
+                            .Where(a => a.expl_Data <= selectedDateMax)
+                            .Where(a => a.expl_Data.Value >= selectedDate);
 
                         break;
                     case "Dyrektor Sprzedaży":
 
                         filteredResult =
                             provisionSet.Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(guid))
-                            .Where(a => a.expl_Data.Value < selectedDateMax)
-                            .Where(a => a.expl_Data.Value > selectedDate);
-
+                            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+                            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+                       
                         break;
                     case "Koordynator":
 
                         filteredResult =
                             provisionSet.Where(a => a.expl_Koordynator.Id == new Guid(guid))
-                            .Where(a => a.expl_Data.Value < selectedDateMax)
-                            .Where(a => a.expl_Data.Value > selectedDate);
+                            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+                            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
 
                         break;
                     case "Konsultant":
 
                         filteredResult =
                             provisionSet.Where(a => a.expl_Konsultant.Id == new Guid(guid))
-                            .Where(a => a.expl_Data.Value < selectedDateMax)
-                            .Where(a => a.expl_Data.Value > selectedDate);
+                            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+                            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
 
                         break;
                     default:
@@ -693,6 +696,212 @@ namespace Portal.Controllers
             ViewBag.Years = yearsList;
 
             return View(asvm);
+        }
+
+
+        public ActionResult Documents(string caseID)
+        {
+
+            if (null == caseID)
+            {
+                return HttpNotFound();
+            }
+
+            string tekst = null;
+            //string fileName = null;
+
+            DocumentViewModel docsList = new DocumentViewModel();
+
+            var url = context.SharePointDocumentLocationSet.Where(c => c.RegardingObjectId.Id == new Guid(caseID));
+            if (url != null)
+            {
+
+
+                foreach (SharePointDocumentLocation b in url)
+                {
+                    tekst = b.RelativeUrl.ToString();
+
+                    RetrieveAbsoluteAndSiteCollectionUrlRequest retrieveRequest = new RetrieveAbsoluteAndSiteCollectionUrlRequest
+                    {
+                        Target = new EntityReference(SharePointDocumentLocation.EntityLogicalName, b.Id)
+                    };
+
+                    RetrieveAbsoluteAndSiteCollectionUrlResponse retriveResponse =
+                        (RetrieveAbsoluteAndSiteCollectionUrlResponse)context.Execute(retrieveRequest);
+                }
+
+                var targetSite = new Uri("https://adversum.sharepoint.com");
+                var login = "supportexisto@adversum.onmicrosoft.com";
+                var password = "AdvCRM2013!";
+
+                var securePassword = new SecureString();
+
+                foreach (char c in password)
+                {
+                    securePassword.AppendChar(c);
+                }
+
+                var onlineCredentials = new SharePointOnlineCredentials(login, securePassword);
+
+                using (ClientContext clientContext = new ClientContext(targetSite))
+                {
+                    clientContext.Credentials = onlineCredentials;
+
+                    if (tekst != null)
+                    {
+
+                        string path = tekst + "/incident/" + tekst.ToString() + "/Klient";
+                        Folder folder = clientContext.Web.GetFolderByServerRelativeUrl("/incident/" + tekst.ToString() + "/Klient");
+
+                        FileCollection files = folder.Files;
+
+                        clientContext.Load(folder);
+                        clientContext.Load(files);
+
+
+
+                        try
+                        {
+
+                            clientContext.ExecuteQuery();
+
+                            int temp = 1;
+
+
+
+                            foreach (var file in files)
+                            {
+
+                                docsList.DocsList.Add(new DocumentsViewObject()
+                                {
+                                    CaseID = caseID,
+                                    FileName = file.Name,
+                                    Url = file.ServerRelativeUrl.ToString(),
+                                    DateOf = file.TimeLastModified.ToShortDateString()
+                                });
+
+                                #region example
+                                //var cell = new TableCell();
+                                //var row = new TableRow();
+                                //if (temp == 1)
+                                //{
+                                //    cell.Font.Bold = true;
+                                //    cell.Text = "Plik";
+                                //    row.Cells.Add(cell);
+                                //    cell = new TableCell();
+                                //    cell.Font.Bold = true;
+                                //    cell.Text = "Data dodania";
+                                //    row.Cells.Add(cell);
+                                //    casetable.Rows.Add(row);
+                                //}
+                                //row = new TableRow();
+                                //cell = new TableCell();
+
+                                //LinkButton myLabel = new LinkButton();
+                                //myLabel.Text = file.Name.ToString();
+                                //myLabel.ID = "Label" + temp.ToString();
+                                //myLabel.CommandArgument = file.ServerRelativeUrl.ToString();
+                                //myLabel.Click += new EventHandler(Clicked);
+                                //fileName = file.Name.ToString();
+                                //panelukas.Controls.Add(myLabel);
+                                //panelukas.Controls.Add(new LiteralControl("<br />"));
+
+                                //cell.Controls.Add(myLabel);
+                                //row.Cells.Add(cell);
+
+                                //cell = new TableCell();
+                                //cell.Text = file.TimeLastModified.ToShortDateString();
+                                //row.Cells.Add(cell);
+                                //casetable.Rows.Add(row);
+                                #endregion example
+
+
+                                temp++;
+                            }
+                            if (temp == 1)
+                            {
+                                //panelukas.Controls.Add(new LiteralControl("Brak dokumentów przypisanych do sprawy"));
+                                //actionResultMessage.Text = "Brak dokumentów przypisanych do sprawy"; 
+                                ViewBag.InfoDocs = "Brak dokumentów przypisanych do sprawy";
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            //panelukas.Controls.Add(new LiteralControl("Brak dokumentów przypisanych do sprawy"));
+                            //actionResultMessage.Text = "Brak dokumentów przypisanych do sprawy";     
+                            ViewBag.InfoDocs = "Brak dokumentów przypisanych do sprawy";
+                        }
+                    }
+                    else
+                    {
+                        //panelukas.Controls.Add(new LiteralControl("Brak dokumentów przypisanych do sprawy"));
+                        //actionResultMessage.Text = "Brak dokumentów przypisanych do sprawy";
+                        ViewBag.InfoDocs = "Brak dokumentów przypisanych do sprawy";
+                    }
+                }
+            }
+            else
+            {
+                // panelukas.Controls.Add(new LiteralControl("Brak dokumentów przypisanych do sprawy"));
+                //actionResultMessage.Text = "Brak dokumentów przypisanych do sprawy";
+                ViewBag.InfoDocs = "Brak dokumentów przypisanych do sprawy";
+            }
+
+            ViewBag.CaseID = caseID;
+
+            return View(docsList);
+
+        }
+
+        public void SingleDocument(string name, string command)
+        {
+
+            string fileName = name;
+            string commandStr = command;
+
+
+            var targetSite = new Uri("https://adversum.sharepoint.com");
+            var login = "supportexisto@adversum.onmicrosoft.com";
+            var password = "AdvCRM2013!";
+
+            var securePassword = new SecureString();
+
+            foreach (char c in password)
+            {
+                securePassword.AppendChar(c);
+            }
+
+            var onlineCredentials = new SharePointOnlineCredentials(login, securePassword);
+
+            using (ClientContext clientContext = new ClientContext(targetSite))
+            {
+                clientContext.Credentials = onlineCredentials;
+                Folder folder = clientContext.Web.GetFolderByServerRelativeUrl("/incident/" + fileName);
+
+                FileCollection files = folder.Files;
+
+                clientContext.Load(folder);
+                clientContext.Load(files);
+                clientContext.ExecuteQuery();
+
+                FileInformation fi = Microsoft.SharePoint.Client.File.OpenBinaryDirect(clientContext, commandStr.ToString());//file.ServerRelativeUrl.ToString());
+
+                MemoryStream memoryStream = new MemoryStream();
+
+                fi.Stream.CopyTo(memoryStream);
+                fi.Stream.Close();
+
+                byte[] btFile = memoryStream.ToArray();
+                memoryStream.Close();
+
+                Response.AddHeader("Content-disposition", "attachment; filename=" + fileName);
+                Response.ContentType = "application/octet-stream";
+                Response.BinaryWrite(btFile);
+                Response.End();
+
+            }
+
+
         }
 
 

@@ -22,18 +22,22 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand adv-li-nav" href="/">
+                    <a class="navbar-brand adv-li-nav" href="/PortalNet/Index">
                         <img alt="Adversum" title="Adversum_logo" src="~/Content/images/adv_logo.png" />
                     </a>
                 </div>
                 <div class="collapse navbar-collapse" id="mynavbar-content">
                     <ul class="nav navbar-nav pull-right">
 
-                        <li class="adv-li-nav"><a href="/">Home</a></li>
+                        @*<li class="adv-li-nav">
+                            @Html.ActionLink("Home", "Index", "PortalNet", new { @class = "" }, null)
+                        </li>*@
 
                         <li class="adv-li-nav">
                             @Html.ActionLink("Sprawy", "Index", "PortalNet", new { @class = "" }, null)
                         </li>
+
+                        
 
                         <li class="adv-li-nav">
                             @Html.ActionLink("Rozliczenia Sieci", "AdversumSettlementEntry", "PortalNet", new { @class = "" }, null)
@@ -46,10 +50,10 @@
                         }
                         else
                         {
-                            
-                            <li class="adv-li-nav pull-right">@Html.ActionLink("WYLOGUJ", "LogOut", "Login", new { @class = ""})</li>
+
+                            <li class="adv-li-nav pull-right">@Html.ActionLink("WYLOGUJ", "LogOut", "Login", new { @class = "" }, null)</li>
                         }
-                       
+
 
                     </ul>
                 </div>
@@ -60,14 +64,40 @@
 
 
     </div>
-
-
-
    
 
-        <div class="container-fluid">
+            @if (null != TempData["loginError"])
+            {
 
-            @*<div class="row">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center alert-danger" style="padding: 30px;">
+                            <h3 style="color: red;">
+                                @TempData["loginError"]
+                            </h3>
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+            @if (null != TempData["info"])
+            {
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center alert-info" style="padding: 30px;">
+                            <h3 style="color: blue;">
+                                @TempData["info"]
+                            </h3>
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+
+        @*<div class="row">
                 <div class="col-md-12" style="margin-top: 10px;">
                     <ol class="breadcrumb">
 
@@ -92,106 +122,76 @@
 
 
 
-            <div class="row">
-                <div class="col-md-12" style="margin-top: 20px; margin-left: 20px;">
-                    <h2>
-                        @Session["userName"]
-                    </h2>
-                </div>
+        <div class="row">
+            <div class="col-md-12" style="margin-top: 20px; margin-left: 20px;">
+                <h2>
+                    @Session["userName"]
+                </h2>
+            </div>
+        </div>
+
+
+
+
+        <div class="row">
+            <div class="col-md-3" style="margin-top: 20px; border-right: 1px solid #dbd3d3;">
+                @Html.Raw(Session["tree"])
             </div>
 
-            <div class="col-md-12">
-
-                @if (null != TempData["loginError"])
-                {
-
-                    <div class="row">
-                        <div class="col-md-6 col-md-offset-3 text-center alert-danger">
-                            <h3 style="color: red;">
-                                @TempData["loginError"]
-                            </h3>
-                        </div>
-
-                    </div>
-
-                }
-
-                @if (null != TempData["info"])
-                {
-
-                    <div class="row">
-                        <div class="col-md-6 col-md-offset-3 text-center alert-info">
-                            <h3 style="color: blue;">
-                                @TempData["info"]
-                            </h3>
-                        </div>
-
-                    </div>
-
-                }
-
+            <div class="col-md-9" style="margin-top: 20px;">
+                @RenderBody()
             </div>
-
-
-            <div class="row">
-                <div class="col-md-3" style="margin-top: 20px; border-right: 1px solid #dbd3d3;">
-                    @Html.Raw(Session["tree"])
-                </div>
-
-                <div class="col-md-9" style="margin-top: 20px;">
-                    @RenderBody()
-                </div>
-
-            </div>
-
-
-
-
-            <hr class="hr-gradient" />
-
-            <div class="row">
-                <div id="adv-footer" class="col-md-12 text-center">
-                    <h2 class="text-shadowed">
-                        &copy; @DateTime.Now.Year - Portal Adversum Application
-                    </h2>
-
-                    <div class="row">
-
-                        <div class="col-md-6 col-md-offset-3">
-
-                            <p>
-                                Adversum Sp. z o.o.
-                            </p>
-                            <p>
-                                ul. Bajońska 13 lok. 14,
-                            </p>
-                            <p>
-                                03-963 Warszawa
-                            </p>
-                            <p>
-                                0 801 011 490
-                            </p>
-                            <p>
-                                22 616 40 77
-                            </p>
-                            <p>
-                                info@adversum.pl
-                            </p>
-
-
-
-
-
-
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-
 
         </div>
+
+
+
+
+        <hr class="hr-gradient" />
+
+        <div class="row">
+            <div id="adv-footer" class="col-md-12 text-center">
+                <h2 class="text-shadowed">
+                    &copy; @DateTime.Now.Year - Portal Adversum Application
+                </h2>
+
+                <div class="row">
+
+                    <div class="col-md-6 col-md-offset-3">
+
+                        <p>
+                            Adversum Sp. z o.o.
+                        </p>
+                        <p>
+                            ul. Bajońska 13 lok. 14,
+                        </p>
+                        <p>
+                            03-963 Warszawa
+                        </p>
+                        <p>
+                            0 801 011 490
+                        </p>
+                        <p>
+                            22 616 40 77
+                        </p>
+                        <p>
+                            info@adversum.pl
+                        </p>
+
+
+
+
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

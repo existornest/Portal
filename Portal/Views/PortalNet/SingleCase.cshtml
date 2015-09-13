@@ -24,9 +24,11 @@
         @Html.ActionLink("Pozwy", "Summons", "PortalNet", new { caseID = Model.Guid.ToString(), client = (string)ViewBag.Client }, null)
     </div>
 
-</div>
+    <div class="col-md-3">
+        @Html.ActionLink("Dokumenty", "Documents", "PortalNet", new { caseID = Model.Guid.ToString() }, null)
+        </div>
 
-
+    </div>
 
 <h2>Sprawa</h2>
 

@@ -4,60 +4,79 @@
 @{
     ViewBag.Title = "Summons";
     Layout = "~/Views/Shared/_LayoutCase.cshtml";
+    int count = Model.list.Count;
 }
 
 <h2>Pozwy, @Model.Client</h2>
 
-<div class="row">
+@if (count > 0)
+{
 
-    <div class="col-md-10 col-md-offset-1">
+    <div class="row">
 
-        <table class="table table-bordered">
+        <div class="col-md-10 col-md-offset-1">
 
-            <thead>
-                <tr>
-                    <td>
-                        Nazwa
-                    </td>
-                    <td>
-                        Kwota
-                    </td>
-                    <td>
-                        Wysłanie pozwu
-                    </td>
-                    <td>
-                        Zakończenie pozwu
-                    </td>
-                </tr>
-            </thead>
+            <table class="table table-bordered">
 
-            <tbody>
-
-                @foreach (SummonObject item in Model.list)
-                {
+                <thead>
                     <tr>
                         <td>
-                            @item.Name
+                            Nazwa
                         </td>
                         <td>
-                            @item.Account.ToString()
+                            Kwota
                         </td>
                         <td>
-                            @item.SendDate
+                            Wysłanie pozwu
                         </td>
                         <td>
-                            @item.EndDate
+                            Zakończenie pozwu
                         </td>
                     </tr>
-                }
-                
-            </tbody>
+                </thead>
 
-        </table>
+                <tbody>
 
-       
+                    @foreach (SummonObject item in Model.list)
+                {
+                        <tr>
+                            <td>
+                                @item.Name
+                            </td>
+                            <td>
+                                @item.Account.ToString()
+                            </td>
+                            <td>
+                                @item.SendDate
+                            </td>
+                            <td>
+                                @item.EndDate
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+
+
+        </div>
 
     </div>
 
-</div>
 
+}
+else
+{
+
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <p class="huge-text">
+                Brak danych
+            </p>
+        </div>
+    </div>
+
+}

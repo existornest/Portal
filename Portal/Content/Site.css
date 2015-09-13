@@ -90,7 +90,6 @@ textarea {
 #adv-navbar {
     background: white;
     background-color: white;
-    
     border: none !important;
 }
 
@@ -314,6 +313,15 @@ thead{
     letter-spacing: 8px;
     text-align: center;
     margin-top: 30px;
+}
+
+.message h{
+    font-weight: 900;
+    color: #ded9d9 !important;
+    font-size: 15px;
+    letter-spacing: 4px;
+    text-align: center;
+    
 }
 
 

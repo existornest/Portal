@@ -14,7 +14,7 @@
 
 
 
-    <div class="col-md-12" style="margin-bottom: 100px;">
+    <div class="col-md-12">
 
         <div id="adv-navbar" class="navbar navbar-default navbar-fixed-top">
 
@@ -32,6 +32,24 @@
                 <div class="collapse navbar-collapse" id="mynavbar-content">
                     <ul class="nav navbar-nav pull-right">
 
+
+                        @if(null != TempData["loginError"])
+                        {
+                            <li class="message">
+                                <h3>
+                                    @TempData["loginError"]
+                                </h3>
+                            </li>
+                        }
+
+                        @if (null != TempData["info"])
+                        {
+                            <li class="message">
+                                <h3>
+                                    @TempData["info"]
+                                </h3>
+                            </li>
+                        }
 
                         @if (ViewBag.Title != "Strona Główna")
                         {
@@ -161,33 +179,7 @@
 
         
 
-                @if (null != TempData["loginError"])
-                {
-
-                    <div class="row">
-                        <div class="col-md-6 col-md-offset-3 text-center alert-danger" style="padding: 30px;margin-top: 20px;">
-                            <h3 style="color: red;">
-                                @TempData["loginError"]
-                            </h3>
-                        </div>
-
-                    </div>
-
-                }
-
-                @if (null != TempData["info"])
-                {
-
-                    <div class="row">
-                        <div class="col-md-6 col-md-offset-3 text-center alert-info" style="padding: 30px; margin-top: 20px;">
-                            <h3 style="color: blue;">
-                                @TempData["info"]
-                            </h3>
-                        </div>
-
-                    </div>
-
-                }
+                
 
           
 

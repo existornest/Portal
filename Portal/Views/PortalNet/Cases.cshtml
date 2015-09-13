@@ -9,6 +9,9 @@
 
 @{
     ViewBag.Title = "Sprawy";
+
+    int count = Model.IncidentModelList.Count;
+
 }
 
 
@@ -20,79 +23,98 @@
 
 <div class="row">
 
-    <div class="col-md-10 col-md-offset-1">
+    <div class="col-md-10">
 
-        <h2>Lista spraw</h2>
+        <h2>Lista spraw @Session["userName"]</h2>
+        
+        
 
     </div>
 
 </div>
 
-<div class="row">
-    <div class="col-md-10 col-md-offset-1">
+@if (count > 0)
+{
 
-        <table class="table table-bordered table-responsive" style="margin-bottom: 20px;">
-            <thead>
-                <tr>
-                    <td>
-                        Nr
-                    </td>
-                    <td>
-                        Klient
-                    </td>
-                    <td>
-                        Numer sprawy
-                    </td>
-                    <td>
-                        Stan sprawy
-                    </td>
-                    <td>
-                        Data utworzenia
-                    </td>
-                    <td>
-                        Data ostatniego działania
-                    </td>
-                </tr>
-            </thead>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
 
-            <tbody>
-
-                @foreach (IncidentObject incident in Model.IncidentModelList)
-                {
+            <table class="table table-bordered table-responsive" style="margin-bottom: 20px;">
+                <thead>
                     <tr>
                         <td>
-                            @counter
+                            Nr
                         </td>
                         <td>
-                            @Html.ActionLink(incident.Client, "SingleCase", "PortalNet", new { caseID = incident.ID, client = incident.Client }, null)
+                            Klient
                         </td>
                         <td>
-                            @incident.Ticket
+                            Numer sprawy
                         </td>
                         <td>
-
-
-                            @incident.State
+                            Stan sprawy
                         </td>
                         <td>
-                            @incident.DateCreated
+                            Data utworzenia
                         </td>
                         <td>
-                            @incident.LastActionDate
+                            Data ostatniego działania
                         </td>
                     </tr>
+                </thead>
 
-                    
+                <tbody>
+
+                    @foreach (IncidentObject incident in Model.IncidentModelList)
+                {
+                        <tr>
+                            <td>
+                                @counter
+                            </td>
+                            <td>
+                                @Html.ActionLink(incident.Client, "SingleCase", "PortalNet", new { caseID = incident.ID, client = incident.Client }, null)
+                            </td>
+                            <td>
+                                @incident.Ticket
+                            </td>
+                            <td>
+
+
+                                @incident.State
+                            </td>
+                            <td>
+                                @incident.DateCreated
+                            </td>
+                            <td>
+                                @incident.LastActionDate
+                            </td>
+                        </tr>
+
+
                         counter++;
-                   
-                        }
 
-                
+                    }
 
-            </tbody>
 
-        </table>
 
+                </tbody>
+
+            </table>
+
+        </div>
     </div>
-</div>
 
+
+}
+else
+{
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 text-center">
+            <p class="huge-text">
+                Brak spraw
+            </p>
+        </div>
+    </div>
+
+}

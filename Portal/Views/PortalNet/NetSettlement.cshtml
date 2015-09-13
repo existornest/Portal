@@ -4,6 +4,7 @@
 
 @{
     Layout = "~/Views/Shared/_LayoutCase.cshtml";
+    int count = Model.NetSettlementList.Count;
 }
 
 
@@ -56,60 +57,75 @@
     Prowizje
 </h2>
 
-<div class="row">
+@if (count > 0)
+{
 
-    <div class="col-md-12">
+    <div class="row">
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <td>
-                        Tytułem
-                    </td>
-                    <td>
-                        Kwota
-                    </td>
-                    <td>
-                        Sprawa
-                    </td>
-                    <td>
-                        Data
-                    </td>
-                </tr>
-            </thead>
+        <div class="col-md-10 col-md-offset-1">
 
-            <tbody>
-
-                @foreach (NetSettlementObject p in Model.NetSettlementList)
-                    {
+            <table class="table table-bordered">
+                <thead>
                     <tr>
                         <td>
-                            @p.Source
+                            Tytułem
                         </td>
                         <td>
-                            @p.Account
+                            Kwota
                         </td>
                         <td>
-                            @p.Name
+                            Sprawa
                         </td>
                         <td>
-                            @p.DateOf
+                            Data
                         </td>
                     </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (NetSettlementObject p in Model.NetSettlementList)
+                    {
+                        <tr>
+                            <td>
+                                @p.Source
+                            </td>
+                            <td>
+                                @p.Account
+                            </td>
+                            <td>
+                                @p.Name
+                            </td>
+                            <td>
+                                @p.DateOf
+                            </td>
+                        </tr>
 
                     }
 
 
 
-            </tbody>
+                </tbody>
 
-        </table>
+            </table>
 
 
+
+        </div>
 
     </div>
 
-</div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <p class="huge-text">
+                Brak danych
+            </p>
+        </div>
+    </div>
+}
 
 
 

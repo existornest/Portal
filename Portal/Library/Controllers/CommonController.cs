@@ -97,6 +97,32 @@ namespace Portal.Library.Controllers
             return optionsetMetadata.Options;
         }
 
+        public DateTime? GetPolishDateTimeNow()
+        {
+
+            DateTime polishDateTime = new DateTime();
+
+            string timeZoneName = "Central European Standard Time";
+
+            try
+            {
+
+                DateTime localTimeZone =
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,
+                DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+
+                TimeZoneInfo getZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneName);
+                polishDateTime = TimeZoneInfo.ConvertTime(localTimeZone, getZone, TimeZoneInfo.Local);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+
+            return polishDateTime;
+        }
+
 
     }
 }

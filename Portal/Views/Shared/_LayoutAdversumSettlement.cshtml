@@ -22,14 +22,14 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand adv-li-nav" href="/">
+                    <a class="navbar-brand adv-li-nav" href="/PortalNet/Index">
                         <img alt="Adversum" title="Adversum_logo" src="~/Content/images/adv_logo.png" />
                     </a>
                 </div>
                 <div class="collapse navbar-collapse" id="mynavbar-content">
                     <ul class="nav navbar-nav pull-right">
 
-                        <li class="adv-li-nav"><a href="/">Home</a></li>
+                        
 
                         <li class="adv-li-nav">
                             @Html.ActionLink("Sprawy", "Index", "PortalNet", new { @class = "" }, null)
@@ -39,6 +39,14 @@
                             @Html.ActionLink("Rozliczenia Sieci", "AdversumSettlementEntry", "PortalNet", new { @class = "" }, null)
                         </li>
 
+                        @if (null != Session["loggedUser"]
+                            && ViewContext.RouteData.Values["controller"].ToString() == "PortalNet"
+                            && ViewContext.RouteData.Values["action"].ToString() == "SingleCase")
+                        {
+                            <li class="adv-li-nav">
+                                @Html.ActionLink("Dokumenty", "Documents", "PortalNet", new { caseID = ViewBag.CaseID }, null)
+                            </li>
+                        }
 
                         @if (null == Session["loggedUser"])
                         {
@@ -46,7 +54,7 @@
                         }
                         else
                         {
-                            <li class="adv-li-nav pull-right">@Html.ActionLink("WYLOGUJ", "LogOut", "Login", new { @class = "" })</li>
+                            <li class="adv-li-nav pull-right">@Html.ActionLink("WYLOGUJ", "LogOut", "Login", new { @class = "" }, null)</li>
                         }
 
 

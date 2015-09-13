@@ -4,50 +4,68 @@
 @{
     ViewBag.Title = "ClientSettlement";
     Layout = "~/Views/Shared/_LayoutCase.cshtml";
+    int count = Model.ClientSettlementsList.Count;
 }
 
 <h2>Rozliczenia Klienta: @Model.ClientName</h2>
 
-<div class="row">
+@if (count > 0)
+{
 
-    <div class="col-md-12">
+    <div class="row">
 
-        <table class="table table-bordered">
+        <div class="col-md-12">
 
-            <thead>
-                <tr>
-                    <td>
-                        Nazwa
-                    </td>
-                    <td>
-                        Kwota
-                    </td>
-                    <td>
-                        Typ
-                    </td>
-                </tr>
-            </thead>
+            <table class="table table-bordered">
 
-            <tbody>
-                @foreach (ClientSettlementObject item in Model.ClientSettlementsList)
-                {
+                <thead>
                     <tr>
                         <td>
-                            @Html.DisplayFor(model => item.Name)
+                            Nazwa
                         </td>
                         <td>
-                            @Html.DisplayFor(model => item.Account)
+                            Kwota
                         </td>
                         <td>
-                            @Html.DisplayFor(model => item.Type)
+                            Typ
                         </td>
                     </tr>
-                }
-            </tbody>
+                </thead>
 
-        </table>
+                <tbody>
+                    @foreach (ClientSettlementObject item in Model.ClientSettlementsList)
+                {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(model => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => item.Account)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => item.Type)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
 
-</div>
 
+
+}
+else{
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <p class="huge-text">
+                Brak danych
+            </p>
+        </div>
+    </div>
+
+}

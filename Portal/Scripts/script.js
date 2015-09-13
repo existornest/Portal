@@ -37,4 +37,10 @@ $(document).ready(function () {
         
     });
 
+
+    $message = $(".message");
+
+    $message.fadeOut(3000);
+
+
 });
