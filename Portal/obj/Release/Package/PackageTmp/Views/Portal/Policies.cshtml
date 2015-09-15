@@ -1,0 +1,114 @@
+﻿@using Portal.ViewModels
+
+@model PoliciesViewModel
+
+@{
+    ViewBag.Title = "Policies";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int counter = Model.PoliciesList.Count;
+
+}
+
+
+<div class="row">
+
+    <div class="col-md-10 col-md-offset-1">
+
+        <h2><i class="fa fa-caret-square-o-down adv-i"></i>Polisy @Session["userName"]</h2>
+
+    </div>
+
+</div>
+
+
+@if (Model != null && counter > 0)
+{
+
+    <div class="row">
+
+        <div class="col-md-10 col-md-offset-1">
+
+            @foreach (PoliciesObject po in Model.PoliciesList)
+            {
+
+                <div>
+                    <table class="table table-responsive table-bordered">
+                        <thead>
+                            <tr>
+                                <td>Numer polisy</td>
+                                <td>Rodzaj ubezpieczenia</td>
+                                <td>Firma ubezpieczeniowa</td>
+                                <td>Kontakt</td>
+                                <td>Konto</td>
+                                <td>Okres ubezpieczenia - start</td>
+                                <td>Okres ubezpieczenia - koniec</td>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+
+                                <td>
+                                    @po.InsuranceNumber
+                                </td>
+                                <td>
+                                    @po.InsuranceType
+                                </td>
+
+                                <td>
+                                    @po.Company
+                                </td>
+
+                                <td>
+                                    @po.Contact
+                                </td>
+
+                                <td>
+                                    @po.Account
+                                </td>
+
+                                <td>
+                                    @po.DateStart
+                                </td>
+
+                                <td>
+                                    @po.DateEnd
+                                </td>
+
+                            </tr>
+
+
+                        </tbody>
+
+                    </table>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+}
+else
+{
+
+    <br/>
+    <div class="row">
+
+        <div class="col-md-4 col-md-offset-4 text-center">
+
+            <p class="huge-text">
+                Brak wyników
+            </p>
+
+        </div>
+
+    </div>
+
+}
+
+
+
+
+

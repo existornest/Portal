@@ -11,6 +11,8 @@ using EarlyBoundTypes;
 using PortalCRM.Library;
 using System.Net.Mail;
 using Portal.Library;
+using System.Diagnostics;
+using System.Configuration;
 
 namespace Portal.Controllers
 {
@@ -19,26 +21,10 @@ namespace Portal.Controllers
         private ResetContext db = new ResetContext();
         protected XrmServiceContext context = new ConnectionContext().XrmContext;
 
-        //// GET: Resets
-        //public ActionResult Index()
-        //{
-        //    return View(db.ResetModelContext.ToList());
-        //}
-
-        // GET: Resets/Details/5
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Reset reset = db.ResetModelContext.Find(id);
-        //    if (reset == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(reset);
-        //}
+        public string BaseURL()
+        {
+            return GetBaseUrl();
+        }
 
         // GET: Reset/Index
         public ActionResult Index()
@@ -51,7 +37,7 @@ namespace Portal.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index([Bind(Include = "ID,UserName,Email,Password,ConfirmPassword")] Reset reset)
+        public ActionResult Index([Bind(Include = "ID,UserName,Password,ConfirmPassword")] Reset reset)
         {
             if (ModelState.IsValid)
             {
@@ -59,11 +45,23 @@ namespace Portal.Controllers
                     .Where(a => a.expl_PortalLogin == reset.UserName)
                     .Select(row => row).FirstOrDefault();
 
+                string email = user.EMailAddress1;
+                //Debugger.Break();
+
+                if (null == email)
+                {
+                    Session.RemoveAll();
+                    TempData["loginError"] = "Użytkownik nie posiada przypisanego adresu email w systemie CRM.";
+                    Session["loggedUser"] = null;
+                    return RedirectToAction("Index", "Login");
+                }
+
                 if (null == user)
                 {
+                    Session.RemoveAll();
                     TempData["loginError"] = "Nie ma takiego użytkownika.";
                     Session["loggedUser"] = null;
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Login");
                 }
 
                 PasswordHash pHash = PasswordHash.Create(reset.Password);
@@ -76,16 +74,20 @@ namespace Portal.Controllers
                 Session[emailGuid + "_hash"] = pHash.Hash;
                 Session[emailGuid + "_salt"] = pHash.Salt;
 
-                string link = "<a href='http://localhost:60774/Reset/ResetPassword" + "?id=" +
+                //string link = "<a href='http://localhost:60774/Reset/ResetPassword" + "?id=" +
+                //    emailGuid + "'>Resetuj hasło</a>";
+
+                string link = "<a href='" + GetBaseUrl() + "Reset/ResetPassword" + "?id=" +
                     emailGuid + "'>Resetuj hasło</a>";
+
 
                 try
                 {
+                   
 
-                    
                     var message = new MailMessage();
-                    message.To.Add(new MailAddress(reset.Email));
-                    message.From = new MailAddress("rnest@rnest.prohost.pl");
+                    message.To.Add(new MailAddress(email));
+                    message.From = new MailAddress(ConfigurationManager.AppSettings["email"]);
                     message.Subject = "Reset hasła";
                     message.Body = "Link do resetu hasła: " + link;
                     message.IsBodyHtml = true;
@@ -94,24 +96,25 @@ namespace Portal.Controllers
                     {
                         var credential = new NetworkCredential
                         {
-                            UserName = "rnest@rnest.prohost.pl",
-                            Password = "rtec4444"
+                            UserName = ConfigurationManager.AppSettings["email_username"],
+                            Password = ConfigurationManager.AppSettings["email_password"]
                         };
                         smtp.Credentials = credential;
-                        smtp.Host = "pol51.nameserverus2.com";
-                        smtp.Port = 25;
+                        smtp.Host = ConfigurationManager.AppSettings["email_host"];
+                        smtp.Port = Convert.ToInt16(ConfigurationManager.AppSettings["email_smtp_port"]);
                         smtp.EnableSsl = false;
                         smtp.Send(message);
-
+                        
                         TempData["info"] = "Potwierdzajacy email został wysłany na podany adres email.";
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Login");
                     }
 
                 }
                 catch(Exception e)
                 {
+                    Session.RemoveAll();
                     TempData["loginError"] = "Wystąpił błąd. Skontaktuj się z administracją.";
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Login");
                 }
 
 
@@ -147,7 +150,7 @@ namespace Portal.Controllers
                 Session[id] = null;
                 Session[id + "_salt"] = null;
                 Session[id + "_hash"] = null;
-
+                Session.RemoveAll();
 
             }
             catch(Exception e)
@@ -155,81 +158,37 @@ namespace Portal.Controllers
                 Session[id] = null;
                 Session[id + "_salt"] = null;
                 Session[id + "_hash"] = null;
-
+                Session.RemoveAll();
                 TempData["loginError"] = "Wystąpił błąd. Skontaktuj się z Administracją.";
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Login");
             }
 
             Session[id] = null;
             Session[id + "_salt"] = null;
             Session[id + "_hash"] = null;
 
+
+            Session.RemoveAll();
             TempData["info"] = "Hasło zostało zmienione.";
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Login");
         }
 
-        // GET: Resets/Edit/5
-        //public ActionResult Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Reset reset = db.ResetModelContext.Find(id);
-        //    if (reset == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(reset);
-        //}
-
-        // POST: Resets/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "ID,UserName,Password,ConfirmPassword")] Reset reset)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(reset).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(reset);
-        //}
-
-        // GET: Resets/Delete/5
-        public ActionResult Delete(int? id)
+        public string GetBaseUrl()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Reset reset = db.ResetModelContext.Find(id);
-            if (reset == null)
-            {
-                return HttpNotFound();
-            }
-            return View(reset);
-        }
+            var request = HttpContext.Request;
+            var appUrl = HttpRuntime.AppDomainAppVirtualPath;
 
-        // POST: Resets/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Reset reset = db.ResetModelContext.Find(id);
-            db.ResetModelContext.Remove(reset);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            //if (!string.IsNullOrWhiteSpace(appUrl)) appUrl += "/";
+
+            var baseUrl = string.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Authority, appUrl);
+            return baseUrl;
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                context.Dispose();
             }
             base.Dispose(disposing);
         }

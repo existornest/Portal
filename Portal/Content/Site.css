@@ -91,6 +91,7 @@ textarea {
     background: white;
     background-color: white;
     border: none !important;
+    
 }
 
 .adv-active {
@@ -100,8 +101,7 @@ textarea {
 
 #nav-wrapper {
     background: white;
-    margin-top: 20px;
-    /*border-top: 1px solid #efe8e8;*/
+    /*height: 100px;*/
 }
 
 .adv-li-nav {
@@ -262,7 +262,7 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 }
 
 .well{
-   background-color: #f8adad !important;
+   background-color: #ded9d9 !important;
 }
 
 table{
@@ -322,6 +322,24 @@ thead{
     letter-spacing: 4px;
     text-align: center;
     
+}
+
+.buffer{
+    height: 100px;
+}
+
+.adv-i{
+    color: #be4846 !important;
+    font-size: 30px;
+    font-weight: 500;
+}
+
+.alert-danger-force{
+    background-color: #ded9d9 !important;
+}
+
+.alert-info-force{
+    background-color: #ded9d9 !important;
 }
 
 

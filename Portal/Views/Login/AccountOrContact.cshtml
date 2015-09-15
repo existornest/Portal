@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewBag.Title = "Wybierz";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+
+@if (null != Session["loggedUser"])
+{
+
+
+    <div class="row">
+
+        <div class="col-md-4 col-md-offset-4 text-center" style="margin-bottom: 20px;">
+
+            <h1>
+                Jesteś zalogowany/a jako <span style="font-weight: 800;">@Session["userName"]</span>
+            </h1>
+
+        </div>
+
+    </div>
+
+    using (Html.BeginForm("CreateSession", "Home", FormMethod.Post))
+    {
+
+        <div class="row">
+            <div class="col-md-3 col-md-offset-4 text-center">
+                    @Html.DropDownList("AccountOrContact", null, new { @class = "form-control" })
+            </div>
+
+            <div class="col-md-2 text-center pull-left">
+                <input type="submit" class="btn btn-info" value="Wybierz" name="logIn" />
+            </div>
+
+        </div>
+
+
+
+    }
+
+
+
+
+
+}
+

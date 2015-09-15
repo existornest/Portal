@@ -1,0 +1,113 @@
+﻿@using EarlyBoundTypes
+@using Portal.Library.Tree
+@using Portal.ViewModels
+@model List<IncidentsViewModel>
+@{
+    ViewBag.Title = "Sprawy";
+    int counter = Model.Count;
+}
+
+
+
+
+<div class="row">
+
+    <div class="col-md-10 col-md-offset-1" style="margin-bottom: 20px;">
+
+        <h3>
+            <i class="fa fa-th-list adv-i"></i>Sprawy @ViewBag.User
+        </h3>
+
+    </div>
+
+</div>
+
+
+
+@if (counter > 0)
+{
+
+    <div class="row">
+
+        <div class="col-md-10 col-md-offset-1" style="margin-bottom: 20px;">
+
+            <table class="table table-bordered">
+
+                <thead>
+                    <tr>
+                        <td>
+
+                            Klient
+                        </td>
+                        <td>
+                            Numer sprawy
+                        </td>
+                        <td>
+                            Stan
+                        </td>
+                        <td>
+                            Data utworzenia
+                        </td>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (IncidentsViewModel inc in Model)
+                {
+                        <tr>
+                            <td>
+                                <div>
+                                    @Html.ActionLink(inc.Client, "Case", "Portal", new { caseID = inc.IncidentID, client = ViewBag.User }, null)
+
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    @inc.CaseNumber
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    @inc.State
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    @inc.DateOfCreation
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+
+}
+
+else
+{
+
+    <div class="row">
+
+        <div class="col-md-4 col-md-offset-4 text-center">
+
+            <p class="huge-text">
+                Brak spraw.
+            </p>
+
+        </div>
+
+    </div>
+
+}
+
+
+

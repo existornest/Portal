@@ -1,0 +1,75 @@
+﻿@model Portal.ViewModels.ClientSettlementViewModel
+@using EarlyBoundTypes
+@using Portal.ViewModels
+@{
+    ViewBag.Title = "ClientSettlement";
+    Layout = "~/Views/Shared/_LayoutCase.cshtml";
+    int count = Model.ClientSettlementsList.Count;
+}
+
+<div class="row">
+    <div class="col-md-12" style="margin-bottom: 20px;">
+        <h2><i class="fa fa-money adv-i"></i>Rozliczenia Klienta: @Model.ClientName</h2>
+    </div>
+</div>
+
+@if (count > 0)
+{
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <table class="table table-bordered">
+
+                <thead>
+                    <tr>
+                        <td>
+                            Nazwa
+                        </td>
+                        <td>
+                            Kwota
+                        </td>
+                        <td>
+                            Typ
+                        </td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (ClientSettlementObject item in Model.ClientSettlementsList)
+                {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(model => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => item.Account)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => item.Type)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+
+}
+else{
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <p class="huge-text">
+                Brak danych
+            </p>
+        </div>
+    </div>
+
+}

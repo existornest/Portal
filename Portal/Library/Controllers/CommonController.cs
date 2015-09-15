@@ -1,6 +1,8 @@
-﻿using Microsoft.Xrm.Sdk.Messages;
+﻿using EarlyBoundTypes;
+using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Portal.Library.Controllers.Abstract;
+using Portal.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +20,12 @@ namespace Portal.Library.Controllers
             if (null == Session["loggedUser"])
             {
                 TempData["loginError"] = "Zaloguj się lub zarejestruj.";
-                filterContext.Result = new RedirectResult("/Home");
+                filterContext.Result = new RedirectResult("/Login");
             }
             
         }
+
+        
 
 
         public int getOptionSetValue(string entityName, string attributeName, string optionsetText)
@@ -112,7 +116,8 @@ namespace Portal.Library.Controllers
                 DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
 
                 TimeZoneInfo getZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneName);
-                polishDateTime = TimeZoneInfo.ConvertTime(localTimeZone, getZone, TimeZoneInfo.Local);
+                polishDateTime = TimeZoneInfo.ConvertTime(localTimeZone, TimeZoneInfo.Local, getZone);
+                
             }
             catch (Exception)
             {
@@ -120,7 +125,49 @@ namespace Portal.Library.Controllers
             }
 
 
+            return polishDateTime.ToLocalTime();
+        }
+
+        public DateTime? ToPolishDateTime(DateTime? tdt)
+        {
+
+            DateTime polishDateTime = new DateTime();
+
+            string timeZoneName = "Central European Standard Time";
+
+           
+
+            try
+            {
+
+                TimeZoneInfo getZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneName);
+                polishDateTime = TimeZoneInfo.ConvertTimeFromUtc(tdt.Value, getZone);
+
+
+            }
+            catch (Exception)
+            {
+                return tdt;
+            }
+
+
             return polishDateTime;
+
+        }
+
+
+
+        public string GetBaseUrl()
+        {
+            var request = HttpContext.Request;
+            var appUrl = HttpRuntime.AppDomainAppVirtualPath;
+
+
+            if (!string.IsNullOrWhiteSpace(appUrl)) appUrl += "/";
+
+
+            var baseUrl = string.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Authority, appUrl);
+            return baseUrl;
         }
 
 

@@ -30,9 +30,7 @@ namespace PortalCRM.Library
 
         protected XrmServiceContext CreateXrmServiceContext(MergeOption? mergeOption = null)
         {
-            //string organizationUri = ConfigurationManager.AppSettings["CRM_OrganisationUri"];
-
-            string organizationUri = "https://adversum.api.crm4.dynamics.com/XRMServices/2011/Organization.svc";
+            string organizationUri = ConfigurationManager.AppSettings["organizationUri"];
 
             IServiceManagement<IOrganizationService> OrganizationServiceManagement = ServiceConfigurationFactory.CreateManagement<IOrganizationService>(new Uri(organizationUri));
             AuthenticationProviderType OrgAuthType = OrganizationServiceManagement.AuthenticationType;
@@ -65,13 +63,9 @@ namespace PortalCRM.Library
 
         private AuthenticationCredentials GetCredentials(AuthenticationProviderType endpointType)
         {
-            //Load the credentials from the Web.config first
-            //string userName = ConfigurationManager.AppSettings["CRM_Username"];
-            //string password = ConfigurationManager.AppSettings["CRM_Password"];
-            //string domain = ConfigurationManager.AppSettings["CRM_Domain"];
-
-            string userName = "SupportExisto@adversum.onmicrosoft.com";
-            string password = "AdvCRM2013!";
+            
+            string userName = ConfigurationManager.AppSettings["userName"];
+            string password = ConfigurationManager.AppSettings["password"];
             string domain = "";
 
             //Load the auth type

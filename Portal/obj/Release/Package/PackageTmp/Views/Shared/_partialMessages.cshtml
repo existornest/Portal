@@ -1,0 +1,38 @@
+﻿
+@if (null != TempData["loginError"])
+{
+
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="alert alert-info-force alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <h2 class="text-center" style="color: #ce0808; padding:5px;">
+                    @TempData["loginError"]
+                </h2>
+                
+            </div>
+        </div>
+    </div>
+
+   
+}
+
+@if (null != TempData["info"])
+{
+
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="alert alert-info-force alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <h2 class="text-center" style="color: #ce0808; padding:5px;">
+                    @TempData["info"]
+                </h2>
+
+            </div>
+        </div>
+    </div>
+
+
+}
+
+

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="Portal.Models.CaseModelContext-Web.config Connection String" description="Portal.Models.CaseModelContext Connection String used in web.config by the application to access the database." defaultValue="Portal.Models.CaseModelContext_ConnectionString" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\rnest\\Documents\\Visual\ Studio\ 2015\\Projects\\PortalAdversum\\Portal\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='Portal.Models.CaseModelContext']/@connectionString" />
+  </parameter>
+  <parameter name="Portal.Models.IncidentContext-Web.config Connection String" description="Portal.Models.IncidentContext Connection String used in web.config by the application to access the database." defaultValue="Portal.Models.IncidentContext_ConnectionString" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\rnest\\Documents\\Visual\ Studio\ 2015\\Projects\\PortalAdversum\\Portal\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='Portal.Models.IncidentContext']/@connectionString" />
+  </parameter>
+  <parameter name="Portal.Models.LoginModelContext-Web.config Connection String" description="Portal.Models.LoginModelContext Connection String used in web.config by the application to access the database." defaultValue="Portal.Models.LoginModelContext_ConnectionString" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\rnest\\Documents\\Visual\ Studio\ 2015\\Projects\\PortalAdversum\\Portal\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='Portal.Models.LoginModelContext']/@connectionString" />
+  </parameter>
+  <parameter name="Portal.Models.ResetContext-Web.config Connection String" description="Portal.Models.ResetContext Connection String used in web.config by the application to access the database." defaultValue="Portal.Models.ResetContext_ConnectionString" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\rnest\\Documents\\Visual\ Studio\ 2015\\Projects\\PortalAdversum\\Portal\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='Portal.Models.ResetContext']/@connectionString" />
+  </parameter>
+</parameters>

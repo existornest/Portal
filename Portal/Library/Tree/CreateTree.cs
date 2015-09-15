@@ -12,7 +12,7 @@ namespace Portal.Library.Tree
     public class CreateTree
     {
 
-        private Tree _tree = new Tree();
+        
         private const string AD = "Dyrektor Regionu";
         private const string SD = "Dyrektor Sprzedaży";
         private const string CD = "Koordynator";
@@ -28,15 +28,7 @@ namespace Portal.Library.Tree
             }
         }
 
-        public List<Node> CommonList
-        {
-            get
-            {
-                return _tree.commonList;
-            }
-
-
-        }
+        
 
         public CreateTree(XrmServiceContext context, Guid userGuid)
         {

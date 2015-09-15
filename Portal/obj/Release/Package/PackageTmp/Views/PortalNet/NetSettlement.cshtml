@@ -1,0 +1,138 @@
+﻿@using EarlyBoundTypes
+@using Portal.ViewModels
+@model Portal.ViewModels.NetSettlementViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutCase.cshtml";
+    int count = Model.NetSettlementList.Count;
+}
+
+
+@{
+    ViewBag.Title = "NetSettlement";
+}
+
+<div class="row">
+    <div class="col-md-12">
+
+        <h2><i class="fa fa-money adv-i"></i>Rozliczenia sieci @ViewBag.Client</h2>
+
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-12" style="margin-bottom: 20px;">
+        <h2>Wybierz datę:</h2>
+    </div>
+</div>
+
+
+
+@using (Html.BeginForm())
+{
+
+    Html.Hidden("client", (string)ViewBag.Client);
+    Html.Hidden("caseID", (string)ViewBag.CaseID);
+
+    <div class="row">
+        <div class="col-md-2">
+            @Html.DropDownList("month", (IEnumerable<SelectListItem>)ViewBag.Months, new { @class = "form-control" })
+        </div>
+
+        <div class="col-md-2">
+            @Html.DropDownList("year", (IEnumerable<SelectListItem>)ViewBag.Years, new { @class = "form-control" })
+        </div>
+
+        <div class="col-md-2">
+            <input type="submit" class="btn btn-info" value="Szukaj" name="search" />
+        </div>
+
+    </div>
+
+    <br />
+
+    <div class="row">
+        
+
+    </div>
+
+
+}
+
+<h2>
+    <i class="fa fa-money adv-i"></i>Prowizje
+</h2>
+
+@if (count > 0)
+{
+
+    <div class="row">
+
+        <div class="col-md-10 col-md-offset-1">
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td>
+                            Tytułem
+                        </td>
+                        <td>
+                            Kwota
+                        </td>
+                        <td>
+                            Sprawa
+                        </td>
+                        <td>
+                            Data
+                        </td>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (NetSettlementObject p in Model.NetSettlementList)
+                    {
+                        <tr>
+                            <td>
+                                @p.Source
+                            </td>
+                            <td>
+                                @p.Account
+                            </td>
+                            <td>
+                                @p.Name
+                            </td>
+                            <td>
+                                @p.DateOf
+                            </td>
+                        </tr>
+
+                    }
+
+
+
+                </tbody>
+
+            </table>
+
+
+
+        </div>
+
+    </div>
+
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <p class="huge-text">
+                Brak danych
+            </p>
+        </div>
+    </div>
+}
+
+
+

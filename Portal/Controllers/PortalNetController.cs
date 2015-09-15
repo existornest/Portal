@@ -22,8 +22,6 @@ namespace Portal.Controllers
         public ActionResult Index()
         {
 
-
-
             ViewBag.Html = Session["tree"];
 
             return View();
@@ -33,8 +31,7 @@ namespace Portal.Controllers
         public ActionResult Cases(string guid, string advFunction, string ad = null, string sd = null, string cd = null)
         {
 
-            //Debugger.Break();
-
+          
             if (null == guid || null == advFunction)
             {
                 return HttpNotFound();
@@ -171,7 +168,6 @@ namespace Portal.Controllers
             ViewBag.Html = Session["tree"];
             ViewBag.Guid = guid;
             ViewBag.advFunction = advFunction;
-            //ViewBag.Tickets = tickets;
 
             return View(im);
         }
@@ -180,11 +176,13 @@ namespace Portal.Controllers
         public ActionResult SingleCase(string caseID, string client)
         {
 
-
             if (null == caseID || null == client)
             {
                 return HttpNotFound();
             }
+
+            Session["caseID"] = caseID;
+            Session["client"] = client;
 
             Incident incident =
             context.IncidentSet
@@ -196,19 +194,17 @@ namespace Portal.Controllers
                .OrderByDescending(d => (d.ActualEnd));
 
             CaseViewModel cvm = new CaseViewModel();
-            cvm.DataWplywu = incident.CreatedOn.GetValueOrDefault().ToLocalTime().ToString("yyyy-MM-dd");
-            cvm.DatawyslaniaUmowy = incident.expl_Datawysaniaumowy.GetValueOrDefault().ToLocalTime().ToString("yyyy-MM-dd");
+            cvm.DataWplywu = incident.CreatedOn.HasValue ? incident.CreatedOn.Value.ToLocalTime().ToString("yyyy-MM-dd") : "";
+            cvm.DatawyslaniaUmowy = incident.expl_Datawysaniaumowy.HasValue ? incident.expl_Datawysaniaumowy.Value.ToLocalTime().ToString("yyyy-MM-dd") : "";
             cvm.EtapSprawy = getOptionSetText("incident", "incidentstagecode", (int)incident.IncidentStageCode);
             cvm.Guid = (Guid)incident.IncidentId;
-            //cvm.Klient = (string)Session["loggedUser"];
-            cvm.Klient = new EntityReference("contact", (Guid)incident.incident_customer_contacts.ContactId).Name;
+            cvm.Klient = incident.CustomerId.Name;
             cvm.RodzajSzkody = incident.expl_Rodzajszkody.Name;
-            cvm.Kontakt = incident.CustomerId.Name;
+            cvm.Kontakt = incident.PrimaryContactId != null ? incident.PrimaryContactId.Name : "";
             cvm.NumerSprawy = incident.TicketNumber;
             cvm.Wlasciciel = incident.OwnerId.Name;
             cvm.TypSprawy = getOptionSetText("incident", "expl_typsprawy", (int)incident.expl_TypSprawy);
             cvm.ZrodloSprawy = getOptionSetText("incident", "expl_zrodlosprawy", (int)incident.expl_zrodlosprawy);
-
 
             ViewBag.Aps = aps;
             ViewBag.Client = client;
@@ -365,7 +361,6 @@ namespace Portal.Controllers
 
             }
 
-            //Debugger.Break();
             ViewBag.Client = client;
             ViewBag.Months = monthsList;
             ViewBag.Years = yearsList;
@@ -450,54 +445,171 @@ namespace Portal.Controllers
                 return HttpNotFound();
             }
 
-            IQueryable<expl_prowizja> provisionSet = context.expl_prowizjaSet;
-            IQueryable<expl_prowizja> filteredResult = null;
+            string polishTimeZoneName = "Central European Standard Time";
+
+            TimeZoneInfo polishZone = TimeZoneInfo.FindSystemTimeZoneById(polishTimeZoneName);
+
+            List<expl_prowizja> provisionSet = context.expl_prowizjaSet.ToList();
+            List<expl_prowizja> filteredResult = null;
 
             DateTime dtNow = (DateTime)GetPolishDateTimeNow();
 
-            DateTime selectedDate = new DateTime(dtNow.Year, dtNow.Month, 1, 0, 0, 0);
+            Session["polish"] = dtNow;
+            Session["now"] = DateTime.Now.ToLocalTime();
+
+            DateTime selectedDate = new DateTime(dtNow.Year, dtNow.Month, 1);
             DateTime selectedDateMax =
-                new DateTime(dtNow.Year, dtNow.Month, DateTime.DaysInMonth(dtNow.Year, dtNow.Month), 23, 59, 59);
+                new DateTime(dtNow.Year, dtNow.Month, DateTime.DaysInMonth(dtNow.Year, dtNow.Month));
 
             switch (advFunction)
             {
                 case "Dyrektor Regionu":
 
-                    filteredResult =
+                    filteredResult = (List<expl_prowizja>)
                         provisionSet.Where(a => a.expl_DyrektorRegionu.Id == new Guid(guid))
-                            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
-                            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+                           .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) <= selectedDateMax)
+                           .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) >= selectedDate);
 
                     break;
                 case "Dyrektor Sprzedaży":
 
-                    filteredResult =
-                        provisionSet.Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(guid))
-                        .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
-                            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+                     filteredResult = (List<expl_prowizja>)
+                         provisionSet.Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(guid))
+                         .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) <= selectedDateMax)
+                           .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) >= selectedDate);
 
                     break;
                 case "Koordynator":
 
-                    filteredResult =
+                    filteredResult = (List<expl_prowizja>)
                         provisionSet.Where(a => a.expl_Koordynator.Id == new Guid(guid))
-                        .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
-                            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+                        .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) <= selectedDateMax)
+                        .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) >= selectedDate).ToList();
 
                     break;
                 case "Konsultant":
 
-                    filteredResult =
+                    filteredResult = (List<expl_prowizja>)
                         provisionSet.Where(a => a.expl_Konsultant.Id == new Guid(guid))
-                        .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
-                            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+                        .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) <= selectedDateMax)
+                        .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) >= selectedDate).ToList();
 
                     break;
                 default:
                     break;
             }
 
-            
+            #region oldSwitch
+
+            //switch (advFunction)
+            //{
+            //    case "Dyrektor Regionu":
+
+            //        filteredResult =
+            //            provisionSet.Where(a => a.expl_DyrektorRegionu.Id == new Guid(guid))
+            //                .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+            //                .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+
+            //        break;
+            //    case "Dyrektor Sprzedaży":
+
+            //        if (null != ad)
+            //        {
+            //            filteredResult =
+            //            provisionSet
+            //            //.Where(a => a.expl_DyrektorRegionu.Id == new Guid(ad))
+            //            .Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(guid))
+            //            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+            //                .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+            //        }
+            //        else
+            //        {
+            //            filteredResult =
+            //            provisionSet.Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(guid))
+            //            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+            //                .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+            //        }
+
+            //        break;
+            //    case "Koordynator":
+
+            //        if (null != ad && null != sd)
+            //        {
+            //            filteredResult =
+            //            provisionSet
+            //            //.Where(a => a.expl_DyrektorRegionu.Id == new Guid(ad))
+            //            //.Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(sd))
+            //            .Where(a => a.expl_Koordynator.Id == new Guid(guid))
+            //            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+            //            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+            //        }
+            //        else if (null == ad && null != sd)
+            //        {
+            //            filteredResult =
+            //            provisionSet
+            //            //.Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(sd))
+            //            .Where(a => a.expl_Koordynator.Id == new Guid(guid))
+            //            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+            //            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+            //        }
+            //        else
+            //        {
+            //            filteredResult =
+            //            provisionSet.Where(a => a.expl_Koordynator.Id == new Guid(guid))
+            //            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+            //            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+            //        }
+
+            //        break;
+            //    case "Konsultant":
+
+            //        if (null != ad && null != sd && null != cd)
+            //        {
+            //            filteredResult =
+            //            provisionSet
+            //            //.Where(a => (a.expl_DyrektorRegionu.Id == new Guid(ad)))
+            //            //.Where(a => (a.expl_Dyrektorsprzedazy.Id == new Guid(sd)))
+            //            //.Where(a => (a.expl_Koordynator.Id == new Guid(cd)))
+            //            .Where(a => a.expl_Konsultant.Id == new Guid(guid))
+            //            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+            //            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+            //        }
+            //        else if (null == ad && null != sd && null != cd)
+            //        {
+            //            filteredResult =
+            //            provisionSet
+            //            //.Where(a => (a.expl_Dyrektorsprzedazy.Id == new Guid(sd)))
+            //            //.Where(a => (a.expl_Koordynator.Id == new Guid(cd)))
+            //            .Where(a => a.expl_Konsultant.Id == new Guid(guid))
+            //            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+            //            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+            //        }
+            //        else if (null == ad && null == sd && null != cd)
+            //        {
+            //            filteredResult =
+            //           provisionSet
+            //           //.Where(a => (a.expl_Koordynator.Id == new Guid(cd)))
+            //           .Where(a => a.expl_Konsultant.Id == new Guid(guid))
+            //           .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+            //           .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+            //        }
+            //        else
+            //        {
+            //            filteredResult =
+            //           provisionSet
+            //           .Where(a => a.expl_Konsultant.Id == new Guid(guid))
+            //           .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+            //           .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+            //        }
+
+            //        break;
+            //    default:
+            //        break;
+            //}
+
+            #endregion oldSwitch
+
+
             AdversumSettlementViewModel asvm = new AdversumSettlementViewModel();
 
             asvm.Summarize = 0;
@@ -509,20 +621,11 @@ namespace Portal.Controllers
 
                 Guid accountGuid = Guid.Empty;
 
-                if (item.expl_ProwizjaRozliczana != null)
-                {
-                    foreach (IQueryable<expl_prowizja> p in context.expl_prowizjaSet)
-                    {
-                        accountGuid = p.Where(b => b.expl_ProwizjaRozliczana.Id == item.expl_Sprawa.Id)
-                            .Select(b => b.expl_zaliczka.Id).FirstOrDefault();
-                    }
-                }
-
                 asvm.AdversumSettlmentsList.Add(new AdversumSettlementObject()
                 {
                     Account = (Decimal)item.expl_Kwota,
                     Case = item.expl_Sprawa != null ? item.expl_Sprawa.Name : "",
-                    DateOf = item.expl_Data.Value.ToLocalTime().ToString("yyyy-MM-dd"),
+                    DateOf = item.expl_Data.Value.ToString("yyyy-MM-dd HH:mm"),
                     //AdvancePayment = new EntityReference("", accountGuid).
                     Source = item.expl_Tytulem.HasValue ? getOptionSetText("expl_prowizja", "expl_tytulem", item.expl_Tytulem.Value) : "",
                 });
@@ -601,8 +704,7 @@ namespace Portal.Controllers
             DateTime selectedDateMax =
                 new DateTime(selectedDate.Year, selectedDate.Month, DateTime.DaysInMonth(selectedDate.Year, selectedDate.Month), 23, 59, 59);
 
-            //Debugger.Break();
-
+          
             List<SelectListItem> yearsList = new List<SelectListItem>();
 
             for (int i = (currentYear - 5), y = 1; i <= (currentYear); i++, y++)
@@ -641,32 +743,32 @@ namespace Portal.Controllers
 
                         filteredResult =
                             provisionSet.Where(a => a.expl_DyrektorRegionu.Id == new Guid(guid))
-                            .Where(a => a.expl_Data <= selectedDateMax)
-                            .Where(a => a.expl_Data.Value >= selectedDate);
+                            .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) <= selectedDateMax)
+                        .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) >= selectedDate);
 
                         break;
                     case "Dyrektor Sprzedaży":
 
                         filteredResult =
                             provisionSet.Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(guid))
-                            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
-                            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
-                       
+                            .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) <= selectedDateMax)
+                        .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) >= selectedDate);
+                        //Debugger.Break();
                         break;
                     case "Koordynator":
 
                         filteredResult =
                             provisionSet.Where(a => a.expl_Koordynator.Id == new Guid(guid))
-                            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
-                            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+                            .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) <= selectedDateMax)
+                        .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) >= selectedDate);
 
                         break;
                     case "Konsultant":
 
                         filteredResult =
                             provisionSet.Where(a => a.expl_Konsultant.Id == new Guid(guid))
-                            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
-                            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+                            .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) <= selectedDateMax)
+                        .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) >= selectedDate);
 
                         break;
                     default:
@@ -684,8 +786,8 @@ namespace Portal.Controllers
                     {
                         Account = (Decimal)item.expl_Kwota,
                         Case = item.expl_Sprawa != null ? item.expl_Sprawa.Name : "",
-                        DateOf = item.expl_Data.Value.ToLocalTime().ToString("yyyy-MM-dd"),
-                        AdvancePayment = item.expl_ProwizjaRozliczana != null ? new EntityReference("expl_prowizjarozliczana", item.expl_ProwizjaRozliczana.Id).Name : "",
+                        DateOf = item.expl_Data.Value.ToString("yyyy-MM-dd HH:mm"),
+                        //AdvancePayment = item.expl_ProwizjaRozliczana != null ? new EntityReference("expl_prowizjarozliczana", item.expl_ProwizjaRozliczana.Id).Name : "",
                         Source = item.expl_Tytulem.HasValue ? getOptionSetText("expl_prowizja", "expl_tytulem", item.expl_Tytulem.Value) : "",
                     });
                 }
@@ -820,30 +922,26 @@ namespace Portal.Controllers
                             }
                             if (temp == 1)
                             {
-                                //panelukas.Controls.Add(new LiteralControl("Brak dokumentów przypisanych do sprawy"));
-                                //actionResultMessage.Text = "Brak dokumentów przypisanych do sprawy"; 
+                                
                                 ViewBag.InfoDocs = "Brak dokumentów przypisanych do sprawy";
                             }
                         }
                         catch (Exception)
                         {
-                            //panelukas.Controls.Add(new LiteralControl("Brak dokumentów przypisanych do sprawy"));
-                            //actionResultMessage.Text = "Brak dokumentów przypisanych do sprawy";     
+                             
                             ViewBag.InfoDocs = "Brak dokumentów przypisanych do sprawy";
                         }
                     }
                     else
                     {
-                        //panelukas.Controls.Add(new LiteralControl("Brak dokumentów przypisanych do sprawy"));
-                        //actionResultMessage.Text = "Brak dokumentów przypisanych do sprawy";
+                        
                         ViewBag.InfoDocs = "Brak dokumentów przypisanych do sprawy";
                     }
                 }
             }
             else
             {
-                // panelukas.Controls.Add(new LiteralControl("Brak dokumentów przypisanych do sprawy"));
-                //actionResultMessage.Text = "Brak dokumentów przypisanych do sprawy";
+                
                 ViewBag.InfoDocs = "Brak dokumentów przypisanych do sprawy";
             }
 

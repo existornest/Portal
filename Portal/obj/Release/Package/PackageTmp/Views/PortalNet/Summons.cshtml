@@ -1,0 +1,90 @@
+﻿@model Portal.ViewModels.SummonsViewModel
+@using EarlyBoundTypes
+@using Portal.ViewModels
+@{
+    ViewBag.Title = "Summons";
+    Layout = "~/Views/Shared/_LayoutCase.cshtml";
+    int count = Model.list.Count;
+}
+
+<div class="row">
+
+    <div class="col-md-12">
+        <h2><i class="fa fa-caret-square-o-down adv-i"></i>Pozwy, @Model.Client</h2>
+
+    </div>
+
+</div>
+
+
+@if (count > 0)
+{
+
+    <div class="row">
+
+        <div class="col-md-10 col-md-offset-1">
+
+            <table class="table table-bordered">
+
+                <thead>
+                    <tr>
+                        <td>
+                            Nazwa
+                        </td>
+                        <td>
+                            Kwota
+                        </td>
+                        <td>
+                            Wysłanie pozwu
+                        </td>
+                        <td>
+                            Zakończenie pozwu
+                        </td>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (SummonObject item in Model.list)
+                {
+                        <tr>
+                            <td>
+                                @item.Name
+                            </td>
+                            <td>
+                                @item.Account.ToString()
+                            </td>
+                            <td>
+                                @item.SendDate
+                            </td>
+                            <td>
+                                @item.EndDate
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+
+
+        </div>
+
+    </div>
+
+
+}
+else
+{
+
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <p class="huge-text">
+                Brak danych
+            </p>
+        </div>
+    </div>
+
+}

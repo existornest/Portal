@@ -15,10 +15,10 @@ namespace Portal.Models
         [Required(ErrorMessage = "Login jest wymagany")]
         public string UserName { get; set; }
 
-        [Display(Name = "Adres email")]
-        [Required(ErrorMessage = "Email jest wymagany")]
-        [EmailAddress(ErrorMessage = "Niewłaściwy adres email")]
-        public string Email { get; set; }
+        //[Display(Name = "Adres email")]
+        //[Required(ErrorMessage = "Email jest wymagany")]
+        //[EmailAddress(ErrorMessage = "Niewłaściwy adres email")]
+        //public string Email { get; set; }
 
         [Display(Name = "Hasło")]
         [Required(ErrorMessage = "Hasło jest wymagane")]

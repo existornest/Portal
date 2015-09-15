@@ -184,24 +184,26 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\PanelController.cs" />
+    <Compile Include="Controllers\PanelNetController.cs" />
     <Compile Include="Controllers\PortalController.cs" />
     <Compile Include="Controllers\PortalNetController.cs" />
+    <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\ResetController.cs" />
-    <Compile Include="Controllers\TreeTestController.cs" />
+    <Compile Include="Controllers\ResetNetController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Library\ConnectionContext.cs" />
     <Compile Include="Library\Controllers\Abstract\BaseController.cs" />
     <Compile Include="Library\Controllers\CommonController.cs" />
+    <Compile Include="Library\Controllers\ExtensionsTools.cs" />
     <Compile Include="Library\DeviceIdManager.cs" />
     <Compile Include="Library\EntityOptionSet.cs" />
     <Compile Include="Library\Helpers\CaseHelper.cs" />
     <Compile Include="Library\PasswordHash.cs" />
     <Compile Include="Library\Tree\CreateTree.cs" />
     <Compile Include="Library\Tree\CreateTreeAdversumSettlement.cs" />
-    <Compile Include="Library\Tree\Node.cs" />
-    <Compile Include="Library\Tree\Tree.cs" />
     <Compile Include="Library\Xrm.cs" />
     <Compile Include="Models\CaseModel.cs" />
     <Compile Include="Models\CaseModelContext.cs" />
@@ -217,7 +219,9 @@
     <Compile Include="ViewModels\DocumentsViewModel.cs" />
     <Compile Include="ViewModels\IncidentsViewModel.cs" />
     <Compile Include="ViewModels\NetSettlementViewModel.cs" />
+    <Compile Include="ViewModels\PanelViewModel.cs" />
     <Compile Include="ViewModels\PoliciesViewModel.cs" />
+    <Compile Include="ViewModels\Register.cs" />
     <Compile Include="ViewModels\SummonsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -239,6 +243,8 @@
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="App_Data\instrukcja.doc" />
+    <None Include="Properties\PublishProfiles\advNewPortal - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\advNewPortal - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -279,7 +285,6 @@
     <Content Include="Views\Reset\Index.cshtml" />
     <Content Include="Views\Portal\Case.cshtml" />
     <Content Include="Views\Main\Index.cshtml" />
-    <Content Include="Views\TreeTest\Index.cshtml" />
     <Content Include="Views\PortalNet\Index.cshtml" />
     <Content Include="Views\Shared\_LayoutCase.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
@@ -294,6 +299,14 @@
     <Content Include="Views\Portal\Documents.cshtml" />
     <Content Include="Views\Portal\Policies.cshtml" />
     <Content Include="Views\PortalNet\Documents.cshtml" />
+    <Content Include="Views\Shared\_partialPanel.cshtml" />
+    <Content Include="Views\Panel\Index.cshtml" />
+    <Content Include="Views\PanelNet\Index.cshtml" />
+    <Content Include="Views\Shared\_partialMessages.cshtml" />
+    <Content Include="Views\ResetNet\Index.cshtml" />
+    <Content Include="Views\Register\Index.cshtml" />
+    <Content Include="Views\Login\AccountOrContact.cshtml" />
+    <Content Include="Views\Home\Account.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -8,6 +8,7 @@ using Portal.ViewModels;
 using PortalCRM.Library;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -47,7 +48,7 @@ namespace Portal.Controllers
                 ivm.IncidentID = item.IncidentId.ToString();
                 ivm.CaseNumber = item.TicketNumber;
                 ivm.Client = item.CustomerId.Name;
-                ivm.DateOfCreation = item.CreatedOn.HasValue ? item.CreatedOn.Value.ToLocalTime().ToString("yyyy-MM-dd") : "";
+                ivm.DateOfCreation = item.CreatedOn.HasValue ? item.CreatedOn.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm") : "";
                 ivm.State = item.StateCode.Value == 1 ? "Aktywna" : "Nieaktywna";
 
                 IncidentsList.Add(ivm);
@@ -112,8 +113,7 @@ namespace Portal.Controllers
             cvm.DatawyslaniaUmowy = incident.expl_Datawysaniaumowy.GetValueOrDefault().ToLocalTime().ToString("yyyy-MM-dd");
             cvm.EtapSprawy = getOptionSetText("incident", "incidentstagecode", (int)incident.IncidentStageCode);
             cvm.Guid = (Guid)incident.IncidentId;
-            //cvm.Klient = (string)Session["loggedUser"];
-            cvm.Klient = client;
+            cvm.Klient = incident.CustomerId.Name;
             cvm.RodzajSzkody = incident.expl_Rodzajszkody.Name;
             cvm.Kontakt = new EntityReference("contact", incident.CustomerId.Id).Name;
             cvm.NumerSprawy = incident.TicketNumber;
@@ -188,26 +188,7 @@ namespace Portal.Controllers
                                 </entity >
                             </fetch >", currentUserGuid);
 
-                //EntityCollection contactsCollection = context.RetrieveMultiple(new FetchExpression(policies));
-
-                //Debugger.Break();
-
-                //policies = string.Format(@" 
-                //        <fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                //            <entity name='expl_polisa'> 
-                //                <attribute name='expl_name'   /> 
-                //                <attribute name='expl_konto'   /> 
-                //                <attribute name='expl_kontakt'   /> 
-                //                <attribute name='expl_dataumowy'   /> 
-                //                <attribute name='expl_rodzajubezpieczenia'   /> 
-                //                <attribute name='expl_firmaubezpieczeniowa'   />     
-                //                <attribute name='expl_okresubezpieczeniastrat'   />
-                //                <attribute name='expl_okresubezpieczeniakoniec'   />
-                //           <filter type='and'>
-                //             <condition attribute='expl_kontakt' value='{0}' uitype='contact' operator='eq'/>
-                //           </filter>
-                //            </entity>
-                //        </fetch>", currentUserGuid);
+                
 
                 EntityCollection policiesCollection = context.RetrieveMultiple(new FetchExpression(policies));
 
@@ -242,8 +223,13 @@ namespace Portal.Controllers
             // logowanie jako konto
             else if (0 == (int)Session["isContact"])
             {
+                Account ac = (Account)Session["Account"];
 
-                policies = string.Format(@" 
+                policies = "";
+
+                if(null != ac)
+                {
+                    policies = string.Format(@" 
                         <fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                             <entity name='account'> 
                                 <attribute name='accountid'   /> 
@@ -251,11 +237,24 @@ namespace Portal.Controllers
                              <condition attribute='primarycontactid' value='{0}' uitype='contact' operator='eq'/>
                            </filter>
                             </entity>
-                        </fetch>", currentUserGuid);
+                        </fetch>", ac.AccountId.ToString());
+                }
+                
+                
 
-                EntityCollection accounts = context.RetrieveMultiple(new FetchExpression(policies));
+                EntityCollection accounts = null;
 
-                if (accounts.Entities.Count > 0)
+                try
+                {
+                    accounts = context.RetrieveMultiple(new FetchExpression(policies));
+                }
+                catch
+                {
+
+                    //return RedirectToAction("");
+                }
+
+                if (accounts != null && accounts.Entities.Count > 0)
                 {
 
                     foreach (Account a in accounts.Entities)
@@ -306,12 +305,7 @@ namespace Portal.Controllers
 
 
             }
-            else
-            {
-
-            }
-
-
+            
 
 
 
@@ -351,8 +345,8 @@ namespace Portal.Controllers
                 }
 
                 var targetSite = new Uri("https://adversum.sharepoint.com");
-                var login = "supportexisto@adversum.onmicrosoft.com";
-                var password = "AdvCRM2013!";
+                var login = ConfigurationManager.AppSettings["userName"];
+                var password = ConfigurationManager.AppSettings["password"];
 
                 var securePassword = new SecureString();
 
@@ -440,30 +434,25 @@ namespace Portal.Controllers
                             }
                             if (temp == 1)
                             {
-                                //panelukas.Controls.Add(new LiteralControl("Brak dokumentów przypisanych do sprawy"));
-                                //actionResultMessage.Text = "Brak dokumentów przypisanych do sprawy"; 
+                               
                                 ViewBag.InfoDocs = "Brak dokumentów przypisanych do sprawy";
                             }
                         }
                         catch (Exception)
                         {
-                            //panelukas.Controls.Add(new LiteralControl("Brak dokumentów przypisanych do sprawy"));
-                            //actionResultMessage.Text = "Brak dokumentów przypisanych do sprawy";     
+                              
                             ViewBag.InfoDocs = "Brak dokumentów przypisanych do sprawy";
                         }
                     }
                     else
                     {
-                        //panelukas.Controls.Add(new LiteralControl("Brak dokumentów przypisanych do sprawy"));
-                        //actionResultMessage.Text = "Brak dokumentów przypisanych do sprawy";
+                        
                         ViewBag.InfoDocs = "Brak dokumentów przypisanych do sprawy";
                     }
                 }
             }
             else
             {
-                // panelukas.Controls.Add(new LiteralControl("Brak dokumentów przypisanych do sprawy"));
-                //actionResultMessage.Text = "Brak dokumentów przypisanych do sprawy";
                 ViewBag.InfoDocs = "Brak dokumentów przypisanych do sprawy";
             }
 
@@ -481,8 +470,8 @@ namespace Portal.Controllers
 
 
             var targetSite = new Uri("https://adversum.sharepoint.com");
-            var login = "supportexisto@adversum.onmicrosoft.com";
-            var password = "AdvCRM2013!";
+            var login = ConfigurationManager.AppSettings["userName"];
+            var password = ConfigurationManager.AppSettings["password"];
 
             var securePassword = new SecureString();
 

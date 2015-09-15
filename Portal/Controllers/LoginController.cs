@@ -18,23 +18,25 @@ namespace Portal.Controllers
 {
     public class LoginController : Controller
     {
-        private LoginModelContext db = new LoginModelContext();
-        protected XrmServiceContext context = new ConnectionContext().XrmContext;
 
-        
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    LoginModel loginModel = db.LoginModels.Find(id);
-        //    if (loginModel == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(loginModel);
-        //}
+        protected XrmServiceContext context = null;
+
+        public LoginController(): base()
+        {
+
+            try
+            {
+                context = new ConnectionContext().XrmContext;
+            }
+            catch
+            {
+                Session.RemoveAll();
+                TempData["loginError"] = "Wystąpiły problemy z połaczeniem do CRM. Proszę spróbować później.";
+                RedirectToAction("Index", "Login");
+            }
+
+            
+        }
 
         // GET: Login/Index
         public ActionResult Index()
@@ -52,19 +54,12 @@ namespace Portal.Controllers
         public ActionResult Index([Bind(Include = "ID,UserName,Password")] LoginModel loginModel)
         {
 
-
-            //int contact = (int)Session["isContact"];
-
-            //Debugger.Break();
-
             if (ModelState.IsValid)
             {
 
                 Contact user = context.ContactSet
                     .Where(a => a.expl_PortalLogin.Equals(loginModel.UserName))
                     .Select(row => row).FirstOrDefault();
-
-                
 
                 if (null == user)
                 {
@@ -95,34 +90,20 @@ namespace Portal.Controllers
                     CreateTreeAdversumSettlement ctas = new CreateTreeAdversumSettlement(context, (Guid)user.ContactId);
                     Session["treeAS"] = ctas.Html;
 
-                    //try
-                    //{
-                        
-                    //}
-                    //catch
-                    //{
-                    //    TempData["loginError"] = "Błędy logowania.";
-                    //    Session.RemoveAll();
-                    //    return RedirectToAction("Index");
-                    //}
-
+                   
                     if (check != "")
                     {
                         Session["netUser"] = 1;
-                        TempData["info"] = "Logowanie poprawne.";
-                        return RedirectToAction("Index", "PortalNet");
+                       
+                    }
+                    else
+                    {
+                        Session["netUser"] = 0;
                     }
 
 
-                    //Debugger.Break();
-
-                    Session["netUser"] = 0;
-                    TempData["info"] = "Logowanie poprawne.";
-                    return RedirectToAction("Index", "Portal");
+                    return RedirectToAction("AccountOrContact", "Login");
                 }
-
-                
-
 
                 TempData["loginError"] = "Błędne hasło.";
                 return RedirectToAction("Index");
@@ -136,66 +117,24 @@ namespace Portal.Controllers
             Session["loggedUser"] = null;
             Session["guid"] = null;
             Session.RemoveAll();
-            TempData["info"] = "Wylogowano poprawnie.";
+            
             return RedirectToAction("Index", "Home");
         }
 
-        // GET: LoginModels/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult AccountOrContact()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            LoginModel loginModel = db.LoginModels.Find(id);
-            if (loginModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(loginModel);
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            list.Add(new SelectListItem() { Text = "Jako Firma", Value = "0" });
+            list.Add(new SelectListItem() { Text = "Jako Osoba Fizyczna", Value = "1", Selected = true });
+
+            ViewBag.AccountOrContact = list;
+
+            return View();
         }
 
-        // POST: LoginModels/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,UserName,Password")] LoginModel loginModel)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(loginModel).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(loginModel);
-        }
-
-        // GET: LoginModels/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            LoginModel loginModel = db.LoginModels.Find(id);
-            if (loginModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(loginModel);
-        }
-
-        // POST: LoginModels/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            LoginModel loginModel = db.LoginModels.Find(id);
-            db.LoginModels.Remove(loginModel);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+        
 
         protected override void Dispose(bool disposing)
         {

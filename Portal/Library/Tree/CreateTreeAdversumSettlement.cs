@@ -12,7 +12,7 @@ namespace Portal.Library.Tree
     public class CreateTreeAdversumSettlement
     {
 
-        private Tree _tree = new Tree();
+        
         private const string AD = "Dyrektor Regionu";
         private const string SD = "Dyrektor Sprzedaży";
         private const string CD = "Koordynator";
@@ -28,15 +28,7 @@ namespace Portal.Library.Tree
             }
         }
 
-        public List<Node> CommonList
-        {
-            get
-            {
-                return _tree.commonList;
-            }
-
-
-        }
+       
 
         public CreateTreeAdversumSettlement(XrmServiceContext context, Guid userGuid)
         {
@@ -279,8 +271,17 @@ namespace Portal.Library.Tree
 
                 if (currentSalesDirector != currentSalesDirectorGuid)
                 {
+                    string additional = "";
 
-                    string additional = "&full=" + currentSalesDirectorName;
+                    if (null != currentAreaDirectorGuid)
+                    {
+                        additional = "&full=" + currentSalesDirectorName + "&ad=" + currentAreaDirectorGuid;
+                    }
+
+                    else
+                    {
+                        additional = "&full=" + currentSalesDirectorName;
+                    }
 
                     if (!firstLoop)
                     {
@@ -320,6 +321,16 @@ namespace Portal.Library.Tree
                 if (currentCoordinator != currentCoordinatorGuid)
                 {
                     string additional = "&full=" + currentCoordinatorName;
+
+                    if(null != currentAreaDirectorGuid && null != currentSalesDirectorGuid)
+                    {
+                        additional += "&ad=" + currentAreaDirectorGuid + "&sd=" + currentSalesDirectorGuid;
+                    }
+                    else if(null == currentAreaDirectorGuid && null != currentSalesDirectorGuid)
+                    {
+                        additional += "&sd=" + currentSalesDirectorGuid;
+                    }
+
 
                     if (!firstLoop)
                     {
@@ -370,9 +381,21 @@ namespace Portal.Library.Tree
                 {
                     string additional = "&full=" + currentConsultantName;
 
-                    currentConsultant = currentConsultantGuid;
+                    if(null != currentAreaDirectorGuid && null != currentSalesDirectorGuid && null != currentCoordinatorGuid)
+                    {
+                        additional += "&ad=" + currentAreaDirectorGuid + "&sd=" + currentSalesDirectorGuid + "&cd=" + currentCoordinatorGuid;
+                    }
+                    else if(null == currentAreaDirectorGuid && null != currentSalesDirectorGuid && null != currentCoordinatorGuid)
+                    {
+                        additional += "&sd=" + currentSalesDirectorGuid + "&cd=" + currentCoordinatorGuid;
+                    }
+                    else if(null == currentAreaDirectorGuid && null == currentSalesDirectorGuid && null != currentCoordinatorGuid)
+                    {
+                        additional += "&cd=" + currentCoordinatorGuid;
+                    }
 
-                    
+
+                    currentConsultant = currentConsultantGuid;
 
                     if (currentConsultantContactGuid.Equals(userGuid.ToString()))
                     {

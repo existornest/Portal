@@ -1,0 +1,53 @@
+﻿@using Portal.ViewModels
+@model Portal.ViewModels.PanelViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+
+    <div class="col-md-10 col-md-offset-1">
+        <h2>
+            <i class="fa fa-caret-square-o-down adv-i"></i>Panel użytkownika
+        </h2>
+    </div>
+
+   
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-10 col-md-offset-1">
+
+        <div class="well">
+
+            <h2>
+                Imię i nazwisko: @Model.FullName
+            </h2>
+
+            <p>
+                Email: @Model.Email
+            </p>
+
+            <p>
+                PESEL: @Model.PIN
+            </p>
+
+            <p>
+                Adres: @Model.Address
+            </p>
+
+            <p>
+                @Html.ActionLink("Zmiana hasła", "Index", "Reset")
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+

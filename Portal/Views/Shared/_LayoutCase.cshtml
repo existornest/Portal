@@ -29,19 +29,34 @@
                 <div class="collapse navbar-collapse" id="mynavbar-content">
                     <ul class="nav navbar-nav pull-right">
 
-                        @*<li class="adv-li-nav">
-                            @Html.ActionLink("Home", "Index", "PortalNet", new { @class = "" }, null)
-                        </li>*@
 
                         <li class="adv-li-nav">
                             @Html.ActionLink("Sprawy", "Index", "PortalNet", new { @class = "" }, null)
                         </li>
 
+                        @if (
+    null != Session["loggedUser"]
+    && ViewContext.RouteData.Values["controller"].ToString() == "PortalNet"
+    && (
+    ViewContext.RouteData.Values["action"].ToString() == "Documents" ||
+     ViewContext.RouteData.Values["action"].ToString() == "NetSettlement" ||
+      ViewContext.RouteData.Values["action"].ToString() == "ClientSettlement" ||
+       ViewContext.RouteData.Values["action"].ToString() == "Summons"
+    )
+    )
+                        {
+                            <li class="adv-li-nav">
+                                @Html.ActionLink("Sprawa", "SingleCase", "PortalNet", new { caseID = Session["caseID"], client = Session["client"] }, null)
+                            </li>
+                        }
                         
 
                         <li class="adv-li-nav">
                             @Html.ActionLink("Rozliczenia Sieci", "AdversumSettlementEntry", "PortalNet", new { @class = "" }, null)
                         </li>
+
+
+                        
 
 
                         @if (null == Session["loggedUser"])
@@ -50,8 +65,19 @@
                         }
                         else
                         {
+                            <li class="adv-li-nav">
+                                @Html.ActionLink("Panel", "Index", "PanelNet", new { guid = Session["guid"] }, null)
+                            </li>
 
-                            <li class="adv-li-nav pull-right">@Html.ActionLink("WYLOGUJ", "LogOut", "Login", new { @class = "" }, null)</li>
+                            if (null != Session["loggedUser"])
+                            {
+                                <li>
+                                    <a href="@Url.Action("LogOut", "Login")" class="btn">
+                                        <i class="fa fa-power-off adv-i"></i>
+                                    </a>
+                                </li>
+                            }
+
                         }
 
 
@@ -66,66 +92,15 @@
     </div>
    
 
-            @if (null != TempData["loginError"])
-            {
+    @Html.Partial("_partialMessages")
 
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12 text-center alert-danger" style="padding: 30px;">
-                            <h3 style="color: red;">
-                                @TempData["loginError"]
-                            </h3>
-                        </div>
-
-                    </div>
-                </div>
-            }
-
-            @if (null != TempData["info"])
-            {
-
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12 text-center alert-info" style="padding: 30px;">
-                            <h3 style="color: blue;">
-                                @TempData["info"]
-                            </h3>
-                        </div>
-
-                    </div>
-                </div>
-            }
-
-
-        @*<div class="row">
-                <div class="col-md-12" style="margin-top: 10px;">
-                    <ol class="breadcrumb">
-
-
-                        @if (ViewContext.RouteData.Values["controller"].ToString() != "Home")
-                        {
-                            @Html.ActionLink("Strona główna", "Index", "Home")
-                            <li class="active">
-                                / @ViewBag.Title
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="active">
-                                Strona główna
-                            </li>
-                        }
-
-                    </ol>
-                </div>
-            </div>*@
-
+           
 
 
         <div class="row">
             <div class="col-md-12" style="margin-top: 20px; margin-left: 20px;">
                 <h2>
-                    @Session["userName"]
+                    <i class="fa fa-caret-square-o-down adv-i"></i>@Session["userName"]
                 </h2>
             </div>
         </div>

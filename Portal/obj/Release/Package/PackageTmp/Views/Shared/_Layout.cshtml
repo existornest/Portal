@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/Content/font-awesome.min.css">
+
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+
+
+
+    <div class="col-md-12">
+
+        <div id="adv-navbar" class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container-fluid">
+
+                <div id="nav-wrapper" class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mynavbar-content">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand adv-li-nav" href="/">
+                        <img alt="Adversum" title="Adversum_logo" src="~/Content/images/adv_logo.png" />
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse" id="mynavbar-content">
+                    <ul class="nav navbar-nav pull-right">
+
+
+                       
+                        @if(null != Session["loggedUser"] && ViewBag.Title == "Strona Główna")
+                        {
+                            <li class="adv-li-nav">
+                                @Html.ActionLink("Sprawy", "Index", "Portal")
+                            </li>
+                            <li class="adv-li-nav">
+                                @Html.ActionLink("Polisy", "Policies", "Portal")
+                            </li>
+                        }
+
+
+
+                        @if (null != Session["loggedUser"]
+&& ViewContext.RouteData.Values["controller"].ToString() == "Portal"
+&& ViewContext.RouteData.Values["action"].ToString() != "Index")
+                        {
+                           
+                                <li class="adv-li-nav">
+                                    @Html.ActionLink("Sprawy", "Index", "Portal")
+                                </li>
+                           
+
+                        }
+
+                        @if (null != Session["loggedUser"]
+                            && ViewContext.RouteData.Values["controller"].ToString() == "Panel"
+                            && ViewContext.RouteData.Values["action"].ToString() == "Index")
+                        {
+                            <li class="adv-li-nav">
+                                @Html.ActionLink("Sprawy", "Index", "Portal")
+                            </li>
+
+                        }
+
+                        @if (null != Session["loggedUser"]
+                && ViewContext.RouteData.Values["controller"].ToString() == "Portal"
+                && ViewContext.RouteData.Values["action"].ToString() == "Documents")
+                        {
+                            <li class="adv-li-nav">
+                                @Html.ActionLink("Sprawa", "Case", "Portal", new { caseID = ViewBag.CaseID }, null)
+                            </li>
+                        }
+
+                        @if (null != Session["loggedUser"])
+                        {
+                            <li class="adv-li-nav">
+                                @Html.ActionLink("Instrukcja", "Instruction", "Portal")
+                            </li>
+
+                            if (ViewContext.RouteData.Values["controller"].ToString() != "Panel")
+                            {
+                                <li class="adv-li-nav">
+                                    @Html.ActionLink("Panel", "Index", "Panel", new { guid = Session["guid"] }, null)
+                                </li>
+
+                            }
+
+
+
+                        }
+
+                        @if (null != Session["loggedUser"]
+                            && ViewContext.RouteData.Values["controller"].ToString() == "Portal"
+                            && ViewContext.RouteData.Values["action"].ToString() != "Policies"
+                            )
+                        {
+                            
+
+                            <li class="adv-li-nav">
+                                @Html.ActionLink("Polisy", "Policies", "Portal")
+                            </li>
+                        }
+
+                        @if (null != Session["loggedUser"]
+                && ViewContext.RouteData.Values["controller"].ToString() == "Portal"
+                && ViewContext.RouteData.Values["action"].ToString() == "Case")
+                        {
+                            <li class="adv-li-nav">
+                                @Html.ActionLink("Dokumenty", "Documents", "Portal", new { caseID = ViewBag.CaseID }, null)
+                            </li>
+                        }
+
+                        @if (null != Session["loggedUser"])
+                        {
+                            <li>
+                                <a href="@Url.Action("LogOut", "Login")" class="btn">
+                                    <i class="fa fa-power-off adv-i"></i>
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+                </div>
+                <hr class="hr-gradient" />
+            </div>
+        </div>
+
+       
+
+    </div>
+   
+    <div class="row">
+        <div class="col-md-12 buffer">
+
+        </div>
+    </div>
+
+    @Html.Partial("_partialMessages")
+
+    <div class="container-fluid">
+
+        @if (null == Session["loggedUser"])
+            {
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 text-center">
+                    <h2 class="text-shadowed-dark">
+                        Witamy w portalu Klienta Adversum
+                    </h2>
+                </div>
+
+            </div>
+        }
+
+
+
+       
+        <div class="row">
+
+            <div class="col-md-12 std-margin-bottom">
+
+                @RenderBody()
+
+            </div>
+
+        </div>
+
+
+
+        <hr class="hr-gradient" />
+
+        <div class="row">
+            <div id="adv-footer" class="col-md-12 text-center">
+                <h2 class="text-shadowed">
+                    &copy; @DateTime.Now.Year - Portal Adversum Application
+                </h2>
+
+                <div class="row">
+
+                    <div class="col-md-6 col-md-offset-3">
+
+                        <p>
+                            Adversum Sp. z o.o.
+                        </p>
+                        <p>
+                            ul. Bajońska 13 lok. 14,
+                        </p>
+                        <p>
+                            03-963 Warszawa
+                        </p>
+                        <p>
+                            0 801 011 490
+                        </p>
+                        <p>
+                            22 616 40 77
+                        </p>
+                        <p>
+                            info@adversum.pl
+                        </p>
+
+
+
+
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript" src="~/Scripts/script.js"></script>
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

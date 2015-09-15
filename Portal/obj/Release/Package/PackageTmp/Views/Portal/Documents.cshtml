@@ -1,0 +1,89 @@
+﻿@using Portal.ViewModels
+
+@model DocumentViewModel
+
+
+
+@{
+    ViewBag.Title = "Dokumenty";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int count = Model.DocsList.Count;
+
+}
+
+
+
+<div class="row">
+
+    <div class="col-md-10 col-md-offset-1">
+
+        <h2><i class="fa fa-paperclip adv-i"></i>Dokumenty</h2>
+
+    </div>
+
+</div>
+
+@if (count > 0)
+{
+    <div class="row">
+
+        <div class="col-md-10 col-md-offset-1">
+
+            <table class="table table-bordered">
+
+                <thead>
+                    <tr>
+
+                        <td>Plik</td>
+                        <td>Data dodania</td>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (DocumentsViewObject item in Model.DocsList)
+                {
+                        <tr>
+                            <td>
+                                @Html.ActionLink(item.FileName, "SingleDocument", "Portal", new { name = item.FileName, command = item.Url }, null)
+                                @item.FileName
+                            </td>
+
+                            <td>
+                                @item.DateOf
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+}
+
+else
+{
+    <div class="row">
+
+        <div class="col-md-10 col-md-offset-1">
+
+            @if (null != ViewBag.InfoDocs)
+            {
+                <p class="huge-text">
+                    @ViewBag.InfoDocs
+                </p>
+            }
+
+        </div>
+
+    </div>
+}
+
+<br/>
+
+

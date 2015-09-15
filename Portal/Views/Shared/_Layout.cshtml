@@ -19,7 +19,8 @@
         <div id="adv-navbar" class="navbar navbar-default navbar-fixed-top">
 
             <div class="container-fluid">
-                <div class="navbar-header">
+
+                <div id="nav-wrapper" class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mynavbar-content">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -33,29 +34,7 @@
                     <ul class="nav navbar-nav pull-right">
 
 
-                        @if(null != TempData["loginError"])
-                        {
-                            <li class="message">
-                                <h3>
-                                    @TempData["loginError"]
-                                </h3>
-                            </li>
-                        }
-
-                        @if (null != TempData["info"])
-                        {
-                            <li class="message">
-                                <h3>
-                                    @TempData["info"]
-                                </h3>
-                            </li>
-                        }
-
-                        @if (ViewBag.Title != "Strona Główna")
-                        {
-                            <li class="adv-li-nav"><a href="/">Home</a></li>
-
-                        }
+                       
                         @if(null != Session["loggedUser"] && ViewBag.Title == "Strona Główna")
                         {
                             <li class="adv-li-nav">
@@ -69,8 +48,20 @@
 
 
                         @if (null != Session["loggedUser"]
-                && ViewContext.RouteData.Values["controller"].ToString() == "Portal"
-                && ViewContext.RouteData.Values["action"].ToString() != "Index")
+&& ViewContext.RouteData.Values["controller"].ToString() == "Portal"
+&& ViewContext.RouteData.Values["action"].ToString() != "Index")
+                        {
+                           
+                                <li class="adv-li-nav">
+                                    @Html.ActionLink("Sprawy", "Index", "Portal")
+                                </li>
+                           
+
+                        }
+
+                        @if (null != Session["loggedUser"]
+                            && ViewContext.RouteData.Values["controller"].ToString() == "Panel"
+                            && ViewContext.RouteData.Values["action"].ToString() == "Index")
                         {
                             <li class="adv-li-nav">
                                 @Html.ActionLink("Sprawy", "Index", "Portal")
@@ -92,6 +83,16 @@
                             <li class="adv-li-nav">
                                 @Html.ActionLink("Instrukcja", "Instruction", "Portal")
                             </li>
+
+                            if (ViewContext.RouteData.Values["controller"].ToString() != "Panel")
+                            {
+                                <li class="adv-li-nav">
+                                    @Html.ActionLink("Panel", "Index", "Panel", new { guid = Session["guid"] }, null)
+                                </li>
+
+                            }
+
+
 
                         }
 
@@ -116,12 +117,13 @@
                             </li>
                         }
 
-
-
-
                         @if (null != Session["loggedUser"])
                         {
-                            <li class="adv-li-nav">@Html.ActionLink("WYLOGUJ", "LogOut", "Login")</li>
+                            <li>
+                                <a href="@Url.Action("LogOut", "Login")" class="btn">
+                                    <i class="fa fa-power-off adv-i"></i>
+                                </a>
+                            </li>
                         }
 
                     </ul>
@@ -134,16 +136,20 @@
 
     </div>
    
+    <div class="row">
+        <div class="col-md-12 buffer">
 
+        </div>
+    </div>
 
-
+    @Html.Partial("_partialMessages")
 
     <div class="container-fluid">
 
         @if (null == Session["loggedUser"])
             {
             <div class="row">
-                <div class="col-md-6 col-md-offset-3 text-center rn-margin-top-100">
+                <div class="col-md-6 col-md-offset-3 text-center">
                     <h2 class="text-shadowed-dark">
                         Witamy w portalu Klienta Adversum
                     </h2>
@@ -154,35 +160,7 @@
 
 
 
-        @*<div class="row">
-            <div class="col-md-12" style="margin-top: 10px;">
-                <ol class="breadcrumb well">
-
-
-                    @if (ViewContext.RouteData.Values["controller"].ToString() != "Home")
-                    {
-                        @Html.ActionLink("Strona główna", "Index", "Home")
-                        <li class="active">
-                            / @ViewBag.Title
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="active">
-                            Strona główna
-                        </li>
-                    }
-
-                </ol>
-            </div>
-        </div>*@
-
-        
-
-                
-
-          
-
+       
         <div class="row">
 
             <div class="col-md-12 std-margin-bottom">
@@ -198,7 +176,7 @@
         <hr class="hr-gradient" />
 
         <div class="row">
-            <div id="adv-footer" class="col-md-12 text-center" style="margin-bottom: -10px;">
+            <div id="adv-footer" class="col-md-12 text-center">
                 <h2 class="text-shadowed">
                     &copy; @DateTime.Now.Year - Portal Adversum Application
                 </h2>

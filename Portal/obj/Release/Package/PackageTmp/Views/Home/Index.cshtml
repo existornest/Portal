@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "Strona Główna";
+}
+
+<br />
+
+
+
+
+
+
+@if (null == Session["loggedUser"])
+{
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <a class="btn btn-info" href="/Login">
+                Zaloguj się
+            </a>
+
+            
+
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+
+
+}
+else
+{
+    <div class="row">
+
+        <div class="col-md-4 col-md-offset-4 text-center">
+
+            <h1>
+                Jesteś zalogowany/a jako <span style="font-weight: 800;">@Session["userName"]</span>
+            </h1>
+
+        </div>
+
+    </div>
+}

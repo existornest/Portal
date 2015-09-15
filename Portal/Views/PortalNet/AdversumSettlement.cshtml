@@ -12,7 +12,22 @@
 
 }
 
-<h2>Rozliczenia Adversum - @ViewBag.FullName</h2>
+<div class="row">
+    <div class="col-md-12">
+        <h2>
+           Date Time Now: @Session["now"]
+        </h2>
+        <h2>
+            Polish: @Session["polish"]
+        </h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12" style="margin-bottom: 10px;">
+        <h2><i class="fa fa-money adv-i"></i>Rozliczenia Adversum - @ViewBag.FullName</h2>
+    </div>
+</div>
 
 
 <div class="row">
@@ -29,20 +44,17 @@
                     @Html.DropDownList("Months", null, new { @class = "form-control" })
                 </div>
 
-                <div class="col-md-2 col-md-offset-1">
+                <div class="col-md-2">
                     @Html.DropDownList("Years", null, new { @class = "form-control" })
                 </div>
 
-            </div>
-
-            <br />
-
-            <div class="row">
                 <div class="col-md-2">
                     <input type="submit" class="btn btn-info" value="Szukaj" name="search" />
                 </div>
 
             </div>
+
+            
         }
 
     </div>
@@ -53,16 +65,16 @@
 
 <div class="row">
 
-    <div class="col-md-4" style="margin-top: 20px;">
+    <div class="col-md-12">
 
-        <div class="alert-success" style="padding:10px;">
-             <h4>
+        
+             <h2>
             Podsumowanie: 
                  <span style="font-weight:800;">
                  @Model.Summarize.ToString("C")
                  </span>
-             </h4>
-        </div>
+             </h2>
+        
 
     </div>
 
