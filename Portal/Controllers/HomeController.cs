@@ -57,8 +57,7 @@ namespace Portal.Controllers
                 }
                 
             }
-
-            if (0 == Convert.ToInt16(accountOrContact))
+            else if (0 == Convert.ToInt16(accountOrContact))
             {
                 Session["isContact"] = 0;
                 return RedirectToAction("Account", "Home");

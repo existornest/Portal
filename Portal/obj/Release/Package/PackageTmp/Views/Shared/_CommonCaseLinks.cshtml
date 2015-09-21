@@ -1,0 +1,80 @@
+﻿
+
+@{
+    string action = ViewContext.RouteData.Values["action"].ToString();
+}
+
+<div class="row">
+
+   <ul class="nav navbar-nav">
+
+       <li>
+           @if (action == "NetSettlement")
+           {
+               <a href="javascript:void(0);" class="adv-active">
+                   Rozliczenie
+               </a>
+           }
+           else
+           {
+               @Html.ActionLink("Rozliczenie", "NetSettlement", "PortalNet",
+           new { caseID = ViewBag.CaseID, client = Session["client"] }, null)
+           }
+       </li>
+
+       <li>
+           @if (action == "ClientSettlement")
+           {
+               <a href="javascript:void(0);" class="adv-active">
+                   Rozliczenie Klienta
+               </a>
+           }
+           else
+           {
+               @Html.ActionLink("Rozliczenie Klienta", "ClientSettlement", "PortalNet",
+       new { caseID = ViewBag.CaseID, client = Session["client"] }, null)
+           }
+
+       </li>
+
+       <li>
+           @if (action == "Summons")
+           {
+               <a href="javascript:void(0);" class="adv-active">
+                   Pozwy
+               </a>
+           }
+           else
+           {
+               @Html.ActionLink("Pozwy", "Summons", "PortalNet",
+       new { caseID = ViewBag.CaseID, client = Session["client"] }, null)
+           }
+
+       </li>
+
+       <li>
+           @if (action == "Documents")
+           {
+               <a href="javascript:void(0);" class="adv-active">
+                   Dokumenty
+               </a>
+           }
+           else
+           {
+               @Html.ActionLink("Dokumenty", "Documents", "PortalNet",
+       new { caseID = ViewBag.CaseID }, null)
+           }
+
+
+
+       </li>
+
+       <li>
+           @Html.ActionLink("Sprawa", "SingleCase", "PortalNet",
+            new { caseID = ViewBag.CaseID, client = Session["client"] }, null)
+
+       </li>
+
+   </ul>
+
+</div>

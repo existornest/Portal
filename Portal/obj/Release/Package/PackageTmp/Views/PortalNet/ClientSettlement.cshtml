@@ -2,14 +2,16 @@
 @using EarlyBoundTypes
 @using Portal.ViewModels
 @{
-    ViewBag.Title = "ClientSettlement";
+    ViewBag.Title = "Rozliczenie Klienta";
     Layout = "~/Views/Shared/_LayoutCase.cshtml";
     int count = Model.ClientSettlementsList.Count;
 }
 
+@Html.Partial("_CommonCaseLinks")
+
 <div class="row">
     <div class="col-md-12" style="margin-bottom: 20px;">
-        <h2><i class="fa fa-money adv-i"></i>Rozliczenia Klienta: @Model.ClientName</h2>
+        <h3><i class="fa fa-money adv-i"></i>Rozliczenia Klienta: @Model.ClientName</h3>
     </div>
 </div>
 

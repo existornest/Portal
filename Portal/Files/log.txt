@@ -1,0 +1,12 @@
+﻿
+======================================
+A public action method 'hygtfrd' was not found on controller 'Portal.Controllers.PortalNetController'.
+======================================
+
+
+======================================
+2015-09-18 13:52:46
+A public action method 'hbjgt' was not found on controller 'Portal.Controllers.PortalNetController'.
+System.Web.Mvc
+======================================
+

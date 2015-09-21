@@ -32,6 +32,27 @@ namespace PortalCRM.Library
         {
             string organizationUri = ConfigurationManager.AppSettings["organizationUri"];
 
+            //IServiceManagement<IOrganizationService> OrganizationServiceManagement = null;
+            //AuthenticationProviderType OrgAuthType;
+            //AuthenticationCredentials authCredentials = null;
+            //AuthenticationCredentials tokenCredentials = null;
+            //OrganizationServiceProxy organizationProxy = null;
+            //SecurityTokenResponse responseToken = null;
+
+            //try
+            //{
+            //    OrganizationServiceManagement = ServiceConfigurationFactory.CreateManagement<IOrganizationService>(new Uri(organizationUri));
+            //    OrgAuthType = OrganizationServiceManagement.AuthenticationType;
+            //    authCredentials = GetCredentials(OrgAuthType);
+            //    tokenCredentials = OrganizationServiceManagement.Authenticate(authCredentials);
+            //    organizationProxy = null;
+            //    responseToken = tokenCredentials.SecurityTokenResponse;
+            //}
+            //catch
+            //{
+
+            //}
+
             IServiceManagement<IOrganizationService> OrganizationServiceManagement = ServiceConfigurationFactory.CreateManagement<IOrganizationService>(new Uri(organizationUri));
             AuthenticationProviderType OrgAuthType = OrganizationServiceManagement.AuthenticationType;
             AuthenticationCredentials authCredentials = GetCredentials(OrgAuthType);

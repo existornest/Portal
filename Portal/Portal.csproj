@@ -231,7 +231,9 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\images\adv_logo.png" />
     <Content Include="Content\images\bc-back1.jpg" />
+    <Content Include="Content\images\ficon.png" />
     <Content Include="favicon.ico" />
+    <Content Include="Files\log.txt" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -307,6 +309,9 @@
     <Content Include="Views\Register\Index.cshtml" />
     <Content Include="Views\Login\AccountOrContact.cshtml" />
     <Content Include="Views\Home\Account.cshtml" />
+    <Content Include="Views\Shared\_footerPartial.cshtml" />
+    <Content Include="Views\Shared\_CommonCaseLinks.cshtml" />
+    <Content Include="Views\Shared\_CommonMenuPartial.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

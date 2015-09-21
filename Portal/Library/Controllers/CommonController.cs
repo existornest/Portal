@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 
 namespace Portal.Library.Controllers
@@ -25,8 +26,7 @@ namespace Portal.Library.Controllers
             
         }
 
-        
-
+       
 
         public int getOptionSetValue(string entityName, string attributeName, string optionsetText)
         {
@@ -134,8 +134,6 @@ namespace Portal.Library.Controllers
             DateTime polishDateTime = new DateTime();
 
             string timeZoneName = "Central European Standard Time";
-
-           
 
             try
             {

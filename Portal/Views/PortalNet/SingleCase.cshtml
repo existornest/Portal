@@ -4,7 +4,7 @@
 @model Portal.ViewModels.CaseViewModel
 
 @{
-    ViewBag.Title = "SingleCase";
+    ViewBag.Title = "Sprawa";
 }
 
 @{
@@ -12,25 +12,32 @@
 }
 
 <div class="row">
-    <div class="col-md-3">
-        @Html.ActionLink("Rozliczenie", "NetSettlement", "PortalNet", new { caseID = Model.Guid.ToString(), client = (string)ViewBag.Client}, null)
-    </div>
 
-    <div class="col-md-3">
-        @Html.ActionLink("Rozliczenie Klienta", "ClientSettlement", "PortalNet", new { caseID = Model.Guid.ToString(), client = (string)ViewBag.Client }, null)
-    </div>
+    <ul class="nav navbar-nav">
 
-    <div class="col-md-3">
-        @Html.ActionLink("Pozwy", "Summons", "PortalNet", new { caseID = Model.Guid.ToString(), client = (string)ViewBag.Client }, null)
-    </div>
+        <li>
+            @Html.ActionLink("Rozliczenie", "NetSettlement", "PortalNet", new { caseID = Model.Guid.ToString(), client = (string)ViewBag.Client }, null)
+        </li>
 
-    <div class="col-md-3">
-        @Html.ActionLink("Dokumenty", "Documents", "PortalNet", new { caseID = Model.Guid.ToString() }, null)
-        </div>
+        <li>
+            @Html.ActionLink("Rozliczenie Klienta", "ClientSettlement", "PortalNet", new { caseID = Model.Guid.ToString(), client = (string)ViewBag.Client }, null)
+        </li>
 
-    </div>
+        <li>
+            @Html.ActionLink("Pozwy", "Summons", "PortalNet", new { caseID = Model.Guid.ToString(), client = (string)ViewBag.Client }, null)
+        </li>
 
-<h2><i class="fa fa-check-square-o adv-i"></i>Sprawa</h2>
+        <li>
+            @Html.ActionLink("Dokumenty", "Documents", "PortalNet", new { caseID = Model.Guid.ToString() }, null)
+        </li>
+
+
+
+    </ul>
+
+</div>
+
+<h3><i class="fa fa-check-square-o adv-i"></i>Informacje</h3>
 
 <div class="row">
     <div class="col-md-12" style="padding: 40px;">
@@ -131,9 +138,9 @@
     </div>
 </div>
 
-<h2>
+<h3>
     <i class="fa fa-check-square-o adv-i"></i>Działania
-</h2>
+</h3>
 
 <div class="row">
 

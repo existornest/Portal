@@ -20,6 +20,12 @@ namespace Portal.Models
         //[EmailAddress(ErrorMessage = "Niewłaściwy adres email")]
         //public string Email { get; set; }
 
+        [Display(Name = "Stare hasło")]
+        [Required(ErrorMessage = "Stare hasło jest wymagane")]
+        [StringLength(255, ErrorMessage = "Długość hasła musi być pomiędzy 5 a 255 znaków", MinimumLength = 5)]
+        [DataType(DataType.Text)]
+        public string OldPassword { get; set; }
+
         [Display(Name = "Hasło")]
         [Required(ErrorMessage = "Hasło jest wymagane")]
         [StringLength(255, ErrorMessage = "Długość hasła musi być pomiędzy 5 a 255 znaków", MinimumLength = 5)]

@@ -24,7 +24,7 @@ namespace Portal.Library.Controllers.Abstract
                 TempData["loginError"] = "Serwis chwilowo niedostępny.";
                 Session["loggedUser"] = null;
                 Session.RemoveAll();
-                RedirectToAction("Index", "Home");
+                RedirectToAction("Index", "Login");
             }
         }
 

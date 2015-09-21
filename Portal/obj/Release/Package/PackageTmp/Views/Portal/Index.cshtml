@@ -5,6 +5,15 @@
 @{
     ViewBag.Title = "Sprawy";
     int counter = Model.Count;
+    string text = ViewBag.User;
+
+    if(null != Session["account"])
+    {
+        Account account = (Account)Session["account"];
+        text = account.Name;
+    }
+
+
 }
 
 
@@ -15,7 +24,7 @@
     <div class="col-md-10 col-md-offset-1" style="margin-bottom: 20px;">
 
         <h3>
-            <i class="fa fa-th-list adv-i"></i>Sprawy @ViewBag.User
+            <i class="fa fa-th-list adv-i"></i>Sprawy @text
         </h3>
 
     </div>

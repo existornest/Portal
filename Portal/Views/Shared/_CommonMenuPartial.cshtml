@@ -1,0 +1,134 @@
+﻿
+
+
+<ul class="nav navbar-nav pull-right">
+
+    @if (null != Session["loggedUser"] && ViewContext.RouteData.Values["controller"].ToString() == "PortalNet")
+    {
+        if (ViewContext.RouteData.Values["action"].ToString() != "AdversumSettlementEntry")
+        {
+            <li class="adv-li-nav">
+                @Html.ActionLink("Rozliczenia Sieci", "AdversumSettlementEntry", "PortalNet", new { @class = "" }, null)
+            </li>
+        }
+
+        if (ViewContext.RouteData.Values["action"].ToString() != "Index")
+        {
+            <li class="adv-li-nav">
+                @Html.ActionLink("Sprawy", "Index", "PortalNet", new { @class = "" }, null)
+            </li>
+        }
+
+        @*if ()
+        {
+            <li class="adv-li-nav">
+                @Html.ActionLink("Polisy", "Policies", "Portal")
+            </li>
+        }*@
+
+        if (null != Session["loggedUser"] && ViewContext.RouteData.Values["controller"].ToString() == "PanelNet")
+        {
+            <li class="adv-li-nav">
+                @Html.ActionLink("Sprawy", "Index", "PortalNet", new { guid = Session["guid"] }, null)
+            </li>
+
+        }
+
+        if (null != Session["loggedUser"] && ViewContext.RouteData.Values["controller"].ToString() == "ResetNet")
+        {
+            <li class="adv-li-nav">
+                @Html.ActionLink("Sprawy", "Index", "PortalNet", new { guid = Session["guid"] }, null)
+            </li>
+
+        }
+
+        <li class="adv-li-nav">
+            @Html.ActionLink("Panel", "Index", "PanelNet", new { guid = Session["guid"] }, null)
+        </li>
+
+    }
+
+
+    @if (null != Session["loggedUser"] && ViewContext.RouteData.Values["controller"].ToString() == "Portal")
+    {
+
+        if (null != Session["loggedUser"] && ViewContext.RouteData.Values["controller"].ToString() == "Portal" && ViewContext.RouteData.Values["action"].ToString() != "Index")
+        {
+            <li class="adv-li-nav">
+                @Html.ActionLink("Sprawy", "Index", "Portal")
+            </li>
+
+        }
+
+        if (null != Session["loggedUser"] && ViewContext.RouteData.Values["action"].ToString() != "Policies" && null != Session["isContact"])
+        {
+            <li class="adv-li-nav">
+                @Html.ActionLink("Polisy", "Policies", "Portal")
+            </li>
+        }
+
+        if (null != Session["loggedUser"] && ViewContext.RouteData.Values["controller"].ToString() == "Panel")
+        {
+            <li class="adv-li-nav">
+                @Html.ActionLink("Sprawy", "Index", "Portal", new { guid = Session["guid"] }, null)
+            </li>
+
+        }
+
+        if (null != Session["loggedUser"] && ViewContext.RouteData.Values["controller"].ToString() == "Reset")
+        {
+            <li class="adv-li-nav">
+                @Html.ActionLink("Sprawy", "Index", "Portal", new { guid = Session["guid"] }, null)
+            </li>
+
+        }
+
+        if (null != Session["loggedUser"] && ViewContext.RouteData.Values["action"].ToString() == "Case")
+        {
+            <li class="adv-li-nav">
+                @Html.ActionLink("Dokumenty", "Documents", "Portal", new { caseID = ViewBag.CaseID }, null)
+            </li>
+        }
+
+
+        if (null != Session["loggedUser"] && ViewContext.RouteData.Values["controller"].ToString() != "Panel")
+        {
+            <li class="adv-li-nav">
+                @Html.ActionLink("Panel", "Index", "Panel", new { guid = Session["guid"] }, null)
+            </li>
+
+        }
+
+    }
+
+
+    @if (null != Session["loggedUser"] && ViewContext.RouteData.Values["controller"].ToString() == "PanelNet")
+    {
+        <li class="adv-li-nav">
+            @Html.ActionLink("Sprawy", "Index", "PortalNet", new { guid = Session["guid"] }, null)
+        </li>
+    }
+
+    @if (null != Session["loggedUser"] && ViewContext.RouteData.Values["controller"].ToString() == "Panel")
+    {
+        <li class="adv-li-nav">
+            @Html.ActionLink("Sprawy", "Index", "Portal", new { guid = Session["guid"] }, null)
+        </li>
+    }
+
+
+    @if (null != Session["loggedUser"])
+    {
+
+        <li class="adv-li-nav">
+            @Html.ActionLink("Instrukcja", "Instruction", "Portal")
+        </li>
+
+        <li class="adv-li-nav">
+            <a href="@Url.Action("LogOut", "Login")">
+                <p style="font-weight:800;">WYLOGUJ</p>
+            </a>
+        </li>
+    }
+
+</ul>

@@ -31,7 +31,7 @@ namespace Portal.Controllers
         public ActionResult Cases(string guid, string advFunction, string ad = null, string sd = null, string cd = null)
         {
 
-          
+
             if (null == guid || null == advFunction)
             {
                 return HttpNotFound();
@@ -183,7 +183,7 @@ namespace Portal.Controllers
 
             Session["caseID"] = caseID;
             Session["client"] = client;
-
+  
             Incident incident =
             context.IncidentSet
                 .Where(a => a.IncidentId.Value.Equals(caseID)).Select(row => row).FirstOrDefault();
@@ -282,6 +282,7 @@ namespace Portal.Controllers
             ViewBag.Months = monthsList;
             ViewBag.Years = yearsList;
             ViewBag.CaseID = caseID;
+            ViewBag.Client = client;
 
             return View(nsvm);
         }
@@ -364,6 +365,7 @@ namespace Portal.Controllers
             ViewBag.Client = client;
             ViewBag.Months = monthsList;
             ViewBag.Years = yearsList;
+            ViewBag.CaseID = caseID;
 
             return View(vm);
         }
@@ -396,6 +398,8 @@ namespace Portal.Controllers
                 });
             }
 
+            ViewBag.CaseID = caseID;
+
             return View(csvm);
         }
 
@@ -425,6 +429,9 @@ namespace Portal.Controllers
                 });
             }
 
+            ViewBag.CaseID = caseID;
+            ViewBag.Client = client;
+
             return View(svm);
         }
 
@@ -434,10 +441,260 @@ namespace Portal.Controllers
             return View();
         }
 
+        #region oldAdversumSettlement
 
         //Get
         //Rozliczenia Adversum
-        public ActionResult AdversumSettlement(string guid, string advFunction, string full)
+        //public ActionResult AdversumSettlement(string guid, string advFunction, string full)
+        //{
+
+        //    if (null == guid || null == advFunction || null == full)
+        //    {
+        //        return HttpNotFound();
+        //    }
+
+        //    string polishTimeZoneName = "Central European Standard Time";
+
+        //    TimeZoneInfo polishZone = TimeZoneInfo.FindSystemTimeZoneById(polishTimeZoneName);
+
+        //    IQueryable<expl_prowizja> provisionSet = context.expl_prowizjaSet;
+
+        //    foreach (expl_prowizja item in provisionSet)
+        //    {
+        //        item.expl_Data.Value.AddDays(1);
+        //        item.expl_Data.Value.AddHours(-22);
+        //    }
+
+        //    IEnumerable<expl_prowizja> filteredResult = null;
+
+        //    DateTime dtNow = (DateTime)GetPolishDateTimeNow();
+
+        //    Session["polish"] = dtNow;
+        //    Session["now"] = DateTime.Now.ToLocalTime();
+
+        //    DateTime selectedDate = new DateTime(dtNow.Year, dtNow.Month, 1);
+        //    DateTime selectedDateMax =
+        //        new DateTime(dtNow.Year, dtNow.Month, DateTime.DaysInMonth(dtNow.Year, dtNow.Month));
+
+        //    switch (advFunction)
+        //    {
+        //        case "Dyrektor Regionu":
+
+        //            filteredResult = 
+        //                provisionSet.Where(a => a.expl_DyrektorRegionu.Id == new Guid(guid))
+        //                   .Where(a => a.expl_Data <= selectedDateMax)
+        //                .Where(a => a.expl_Data >= selectedDate);
+
+        //            break;
+        //        case "Dyrektor Sprzedaży":
+
+        //            filteredResult =
+        //                provisionSet
+        //                .Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(guid))
+        //                .Where(a => a.expl_Data <= selectedDateMax)
+        //                .Where(a => a.expl_Data >= selectedDate);
+
+        //            break;
+        //        case "Koordynator":
+
+        //            filteredResult =
+        //                provisionSet.Where(a => a.expl_Koordynator.Id == new Guid(guid))
+        //                .Where(a => a.expl_Data <= selectedDateMax)
+        //                .Where(a => a.expl_Data >= selectedDate);
+
+        //            break;
+        //        case "Konsultant":
+
+        //            filteredResult = 
+        //                provisionSet.Where(a => a.expl_Konsultant.Id == new Guid(guid))
+        //                .Where(a => a.expl_Data <= selectedDateMax)
+        //                .Where(a => a.expl_Data >= selectedDate);
+
+        //            break;
+        //        default:
+        //            break;
+        //    }
+
+        //    #region oldSwitch
+
+        //    //switch (advFunction)
+        //    //{
+        //    //    case "Dyrektor Regionu":
+
+        //    //        filteredResult =
+        //    //            provisionSet.Where(a => a.expl_DyrektorRegionu.Id == new Guid(guid))
+        //    //                .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+        //    //                .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+
+        //    //        break;
+        //    //    case "Dyrektor Sprzedaży":
+
+        //    //        if (null != ad)
+        //    //        {
+        //    //            filteredResult =
+        //    //            provisionSet
+        //    //            //.Where(a => a.expl_DyrektorRegionu.Id == new Guid(ad))
+        //    //            .Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(guid))
+        //    //            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+        //    //                .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+        //    //        }
+        //    //        else
+        //    //        {
+        //    //            filteredResult =
+        //    //            provisionSet.Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(guid))
+        //    //            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+        //    //                .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+        //    //        }
+
+        //    //        break;
+        //    //    case "Koordynator":
+
+        //    //        if (null != ad && null != sd)
+        //    //        {
+        //    //            filteredResult =
+        //    //            provisionSet
+        //    //            //.Where(a => a.expl_DyrektorRegionu.Id == new Guid(ad))
+        //    //            //.Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(sd))
+        //    //            .Where(a => a.expl_Koordynator.Id == new Guid(guid))
+        //    //            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+        //    //            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+        //    //        }
+        //    //        else if (null == ad && null != sd)
+        //    //        {
+        //    //            filteredResult =
+        //    //            provisionSet
+        //    //            //.Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(sd))
+        //    //            .Where(a => a.expl_Koordynator.Id == new Guid(guid))
+        //    //            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+        //    //            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+        //    //        }
+        //    //        else
+        //    //        {
+        //    //            filteredResult =
+        //    //            provisionSet.Where(a => a.expl_Koordynator.Id == new Guid(guid))
+        //    //            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+        //    //            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+        //    //        }
+
+        //    //        break;
+        //    //    case "Konsultant":
+
+        //    //        if (null != ad && null != sd && null != cd)
+        //    //        {
+        //    //            filteredResult =
+        //    //            provisionSet
+        //    //            //.Where(a => (a.expl_DyrektorRegionu.Id == new Guid(ad)))
+        //    //            //.Where(a => (a.expl_Dyrektorsprzedazy.Id == new Guid(sd)))
+        //    //            //.Where(a => (a.expl_Koordynator.Id == new Guid(cd)))
+        //    //            .Where(a => a.expl_Konsultant.Id == new Guid(guid))
+        //    //            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+        //    //            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+        //    //        }
+        //    //        else if (null == ad && null != sd && null != cd)
+        //    //        {
+        //    //            filteredResult =
+        //    //            provisionSet
+        //    //            //.Where(a => (a.expl_Dyrektorsprzedazy.Id == new Guid(sd)))
+        //    //            //.Where(a => (a.expl_Koordynator.Id == new Guid(cd)))
+        //    //            .Where(a => a.expl_Konsultant.Id == new Guid(guid))
+        //    //            .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+        //    //            .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+        //    //        }
+        //    //        else if (null == ad && null == sd && null != cd)
+        //    //        {
+        //    //            filteredResult =
+        //    //           provisionSet
+        //    //           //.Where(a => (a.expl_Koordynator.Id == new Guid(cd)))
+        //    //           .Where(a => a.expl_Konsultant.Id == new Guid(guid))
+        //    //           .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+        //    //           .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+        //    //        }
+        //    //        else
+        //    //        {
+        //    //            filteredResult =
+        //    //           provisionSet
+        //    //           .Where(a => a.expl_Konsultant.Id == new Guid(guid))
+        //    //           .Where(a => a.expl_Data <= selectedDateMax.ToUniversalTime())
+        //    //           .Where(a => a.expl_Data >= selectedDate.ToUniversalTime());
+        //    //        }
+
+        //    //        break;
+        //    //    default:
+        //    //        break;
+        //    //}
+
+        //    #endregion oldSwitch
+
+
+        //    AdversumSettlementViewModel asvm = new AdversumSettlementViewModel();
+
+        //    asvm.Summarize = 0;
+
+        //    foreach (expl_prowizja item in filteredResult)
+        //    {
+
+        //        asvm.Summarize += item.expl_Kwota.Value;
+
+        //        Guid accountGuid = Guid.Empty;
+
+        //        asvm.AdversumSettlmentsList.Add(new AdversumSettlementObject()
+        //        {
+        //            Account = (Decimal)item.expl_Kwota,
+        //            Case = item.expl_Sprawa != null ? item.expl_Sprawa.Name : "",
+        //            DateOf = item.expl_Data.Value.ToString("yyyy-MM-dd HH:mm"),
+        //            //AdvancePayment = new EntityReference("", accountGuid).
+        //            Source = item.expl_Tytulem.HasValue ? getOptionSetText("expl_prowizja", "expl_tytulem", item.expl_Tytulem.Value) : "",
+        //        });
+
+        //    }
+
+        //    List<SelectListItem> monthsList = new List<SelectListItem>();
+
+        //    int currentYear = dtNow.Year;
+
+        //    List<SelectListItem> yearsList = new List<SelectListItem>();
+
+        //    for (int i = (currentYear - 5), y = 1; i <= (currentYear); i++, y++)
+        //    {
+        //        if (i == currentYear)
+        //        {
+        //            yearsList.Add(new SelectListItem() { Text = i.ToString(), Value = y.ToString(), Selected = true });
+        //        }
+        //        else
+        //        {
+        //            yearsList.Add(new SelectListItem() { Text = i.ToString(), Value = y.ToString() });
+        //        }
+        //    }
+
+        //    string[] months = {
+        //        "Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec",
+        //        "Lipiec" ,"Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"
+        //    };
+
+        //    for (int i = 0; i < 12; i++)
+        //    {
+        //        if (i == (selectedDate.Month - 1))
+        //        {
+        //            monthsList.Add(new SelectListItem() { Text = months[i], Value = (i + 1).ToString(), Selected = true });
+        //        }
+        //        else
+        //        {
+        //            monthsList.Add(new SelectListItem() { Text = months[i], Value = (i + 1).ToString() });
+        //        }
+        //    }
+
+        //    ViewBag.FullName = full;
+        //    ViewBag.Months = monthsList;
+        //    ViewBag.Years = yearsList;
+
+        //    return View(asvm);
+        //}
+
+        #endregion oldAdversumSettlement
+
+
+
+        public ActionResult AdversumSettlement(string guid, string advFunction, string full, string ad = null, string sd = null, string cd = null)
         {
 
             if (null == guid || null == advFunction || null == full)
@@ -449,8 +706,9 @@ namespace Portal.Controllers
 
             TimeZoneInfo polishZone = TimeZoneInfo.FindSystemTimeZoneById(polishTimeZoneName);
 
-            List<expl_prowizja> provisionSet = context.expl_prowizjaSet.ToList();
-            List<expl_prowizja> filteredResult = null;
+            IQueryable<expl_prowizja> provisionSet = context.expl_prowizjaSet;
+
+            IEnumerable<expl_prowizja> filteredResult = null;
 
             DateTime dtNow = (DateTime)GetPolishDateTimeNow();
 
@@ -465,34 +723,108 @@ namespace Portal.Controllers
             {
                 case "Dyrektor Regionu":
 
-                    filteredResult = (List<expl_prowizja>)
+                    filteredResult =
                         provisionSet.Where(a => a.expl_DyrektorRegionu.Id == new Guid(guid))
-                           .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) <= selectedDateMax)
-                           .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) >= selectedDate);
+                        .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                    .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
 
                     break;
                 case "Dyrektor Sprzedaży":
 
-                     filteredResult = (List<expl_prowizja>)
-                         provisionSet.Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(guid))
-                         .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) <= selectedDateMax)
-                           .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) >= selectedDate);
+                    if (null != ad)
+                    {
+                        filteredResult =
+                        provisionSet
+                        .Where(a => a.expl_DyrektorRegionu.Id == new Guid(ad))
+                        .Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(guid))
+                        .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                        .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+
+                    }
+                    else
+                    {
+                        filteredResult =
+                        provisionSet.Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(guid))
+                        .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                        .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+
+                    }
+
 
                     break;
                 case "Koordynator":
 
-                    filteredResult = (List<expl_prowizja>)
-                        provisionSet.Where(a => a.expl_Koordynator.Id == new Guid(guid))
-                        .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) <= selectedDateMax)
-                        .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) >= selectedDate).ToList();
+                    if (null != ad && null != sd)
+                    {
+                        filteredResult =
+                        provisionSet
+                        .Where(a => a.expl_DyrektorRegionu.Id == new Guid(ad))
+                        .Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(sd))
+                        .Where(a => a.expl_Koordynator.Id == new Guid(guid))
+                        .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                        .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+                    }
+                    else if (null == ad && null != sd)
+                    {
+                        filteredResult =
+                        provisionSet
+                        .Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(sd))
+                        .Where(a => a.expl_Koordynator.Id == new Guid(guid))
+                        .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                        .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+                    }
+                    else
+                    {
+                        filteredResult =
+                        provisionSet
+                        .Where(a => a.expl_Koordynator.Id == new Guid(guid))
+                        .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                        .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+                    }
+
+
 
                     break;
                 case "Konsultant":
 
-                    filteredResult = (List<expl_prowizja>)
+                    if (null != ad && null != sd && null != cd)
+                    {
+                        filteredResult =
+                        provisionSet
+                        .Where(a => a.expl_DyrektorRegionu.Id == new Guid(ad))
+                        .Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(sd))
+                        .Where(a => a.expl_Koordynator.Id == new Guid(cd))
+                        .Where(a => a.expl_Konsultant.Id == new Guid(guid))
+                        .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                        .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+                    }
+                    else if (null == ad && null != sd && null != cd)
+                    {
+                        filteredResult =
+                        provisionSet
+                        .Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(sd))
+                        .Where(a => a.expl_Koordynator.Id == new Guid(cd))
+                        .Where(a => a.expl_Konsultant.Id == new Guid(guid))
+                        .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                        .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+                    }
+                    else if (null == ad && null == sd && null != cd)
+                    {
+                        filteredResult =
+                        provisionSet
+                        .Where(a => a.expl_Koordynator.Id == new Guid(cd))
+                        .Where(a => a.expl_Konsultant.Id == new Guid(guid))
+                        .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                        .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+                    }
+                    else
+                    {
+                        filteredResult =
                         provisionSet.Where(a => a.expl_Konsultant.Id == new Guid(guid))
-                        .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) <= selectedDateMax)
-                        .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) >= selectedDate).ToList();
+                        .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                        .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+                    }
+
 
                     break;
                 default:
@@ -620,18 +952,31 @@ namespace Portal.Controllers
                 asvm.Summarize += item.expl_Kwota.Value;
 
                 Guid accountGuid = Guid.Empty;
+                string caseName = "";
+
+                if (item.expl_ProwizjaRozliczana != null)
+                {
+                    var zaliczka = context.expl_prowizjaSet
+                    .Where(c => ((c.Id == item.expl_ProwizjaRozliczana.Id)));
+
+                    foreach (expl_prowizja b in zaliczka)
+                    {
+                        caseName = b.expl_Sprawa.Name.ToString();
+                    }
+
+                }
 
                 asvm.AdversumSettlmentsList.Add(new AdversumSettlementObject()
                 {
                     Account = (Decimal)item.expl_Kwota,
                     Case = item.expl_Sprawa != null ? item.expl_Sprawa.Name : "",
-                    DateOf = item.expl_Data.Value.ToString("yyyy-MM-dd HH:mm"),
-                    //AdvancePayment = new EntityReference("", accountGuid).
+                    DateOf = item.expl_Data.Value.AddHours(2).ToString("yyyy-MM-dd"),
+                    AdvancePayment = caseName,
                     Source = item.expl_Tytulem.HasValue ? getOptionSetText("expl_prowizja", "expl_tytulem", item.expl_Tytulem.Value) : "",
                 });
 
             }
-            
+
             List<SelectListItem> monthsList = new List<SelectListItem>();
 
             int currentYear = dtNow.Year;
@@ -674,14 +1019,16 @@ namespace Portal.Controllers
             return View(asvm);
         }
 
+
         // Rozliczenia Adversum
         [HttpPost]
         public ActionResult AdversumSettlement(string guid, string advFunction, string Months, string Years,
-            AdversumSettlementViewModel asvm, string full)
+            AdversumSettlementViewModel asvm, string full, string ad = null, string sd = null, string cd = null)
         {
 
             IQueryable<expl_prowizja> provisionSet = context.expl_prowizjaSet;
-            IQueryable<expl_prowizja> filteredResult = null;
+
+            IEnumerable<expl_prowizja> filteredResult = null;
 
             List<SelectListItem> monthsList = new List<SelectListItem>();
 
@@ -704,7 +1051,7 @@ namespace Portal.Controllers
             DateTime selectedDateMax =
                 new DateTime(selectedDate.Year, selectedDate.Month, DateTime.DaysInMonth(selectedDate.Year, selectedDate.Month), 23, 59, 59);
 
-          
+
             List<SelectListItem> yearsList = new List<SelectListItem>();
 
             for (int i = (currentYear - 5), y = 1; i <= (currentYear); i++, y++)
@@ -743,32 +1090,106 @@ namespace Portal.Controllers
 
                         filteredResult =
                             provisionSet.Where(a => a.expl_DyrektorRegionu.Id == new Guid(guid))
-                            .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) <= selectedDateMax)
-                        .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) >= selectedDate);
+                            .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                        .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
 
                         break;
                     case "Dyrektor Sprzedaży":
 
-                        filteredResult =
+                        if (null != ad)
+                        {
+                            filteredResult =
+                            provisionSet
+                            .Where(a => a.expl_DyrektorRegionu.Id == new Guid(ad))
+                            .Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(guid))
+                            .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                            .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+
+                        }
+                        else
+                        {
+                            filteredResult =
                             provisionSet.Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(guid))
-                            .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) <= selectedDateMax)
-                        .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) >= selectedDate);
-                        //Debugger.Break();
+                            .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                            .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+
+                        }
+
+
                         break;
                     case "Koordynator":
 
-                        filteredResult =
-                            provisionSet.Where(a => a.expl_Koordynator.Id == new Guid(guid))
-                            .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) <= selectedDateMax)
-                        .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) >= selectedDate);
+                        if (null != ad && null != sd)
+                        {
+                            filteredResult =
+                            provisionSet
+                            .Where(a => a.expl_DyrektorRegionu.Id == new Guid(ad))
+                            .Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(sd))
+                            .Where(a => a.expl_Koordynator.Id == new Guid(guid))
+                            .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                            .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+                        }
+                        else if (null == ad && null != sd)
+                        {
+                            filteredResult =
+                            provisionSet
+                            .Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(sd))
+                            .Where(a => a.expl_Koordynator.Id == new Guid(guid))
+                            .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                            .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+                        }
+                        else
+                        {
+                            filteredResult =
+                            provisionSet
+                            .Where(a => a.expl_Koordynator.Id == new Guid(guid))
+                            .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                            .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+                        }
+
+
 
                         break;
                     case "Konsultant":
 
-                        filteredResult =
+                        if (null != ad && null != sd && null != cd)
+                        {
+                            filteredResult =
+                            provisionSet
+                            .Where(a => a.expl_DyrektorRegionu.Id == new Guid(ad))
+                            .Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(sd))
+                            .Where(a => a.expl_Koordynator.Id == new Guid(cd))
+                            .Where(a => a.expl_Konsultant.Id == new Guid(guid))
+                            .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                            .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+                        }
+                        else if (null == ad && null != sd && null != cd)
+                        {
+                            filteredResult =
+                            provisionSet
+                            .Where(a => a.expl_Dyrektorsprzedazy.Id == new Guid(sd))
+                            .Where(a => a.expl_Koordynator.Id == new Guid(cd))
+                            .Where(a => a.expl_Konsultant.Id == new Guid(guid))
+                            .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                            .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+                        }
+                        else if (null == ad && null == sd && null != cd)
+                        {
+                            filteredResult =
+                            provisionSet
+                            .Where(a => a.expl_Koordynator.Id == new Guid(cd))
+                            .Where(a => a.expl_Konsultant.Id == new Guid(guid))
+                            .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                            .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+                        }
+                        else
+                        {
+                            filteredResult =
                             provisionSet.Where(a => a.expl_Konsultant.Id == new Guid(guid))
-                            .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) <= selectedDateMax)
-                        .Where(a => a.expl_Data.GetValueOrDefault().AddHours(2) >= selectedDate);
+                            .Where(a => a.expl_Data <= selectedDateMax.AddHours(-2))
+                            .Where(a => a.expl_Data >= selectedDate.AddHours(-2));
+                        }
+
 
                         break;
                     default:
@@ -780,14 +1201,28 @@ namespace Portal.Controllers
                 foreach (expl_prowizja item in filteredResult)
                 {
 
+                    string caseName = "";
+
+                    if (item.expl_ProwizjaRozliczana != null)
+                    {
+                        var zaliczka = context.expl_prowizjaSet
+                        .Where(c => ((c.Id == item.expl_ProwizjaRozliczana.Id)));
+
+                        foreach (expl_prowizja b in zaliczka)
+                        {
+                            caseName = b.expl_Sprawa.Name.ToString();
+                        }
+
+                    }
+
                     asvm.Summarize += item.expl_Kwota.Value;
 
                     asvm.AdversumSettlmentsList.Add(new AdversumSettlementObject()
                     {
                         Account = (Decimal)item.expl_Kwota,
                         Case = item.expl_Sprawa != null ? item.expl_Sprawa.Name : "",
-                        DateOf = item.expl_Data.Value.ToString("yyyy-MM-dd HH:mm"),
-                        //AdvancePayment = item.expl_ProwizjaRozliczana != null ? new EntityReference("expl_prowizjarozliczana", item.expl_ProwizjaRozliczana.Id).Name : "",
+                        DateOf = item.expl_Data.Value.AddHours(2).ToString("yyyy-MM-dd"),
+                        AdvancePayment = caseName,
                         Source = item.expl_Tytulem.HasValue ? getOptionSetText("expl_prowizja", "expl_tytulem", item.expl_Tytulem.Value) : "",
                     });
                 }
@@ -922,26 +1357,26 @@ namespace Portal.Controllers
                             }
                             if (temp == 1)
                             {
-                                
+
                                 ViewBag.InfoDocs = "Brak dokumentów przypisanych do sprawy";
                             }
                         }
                         catch (Exception)
                         {
-                             
+
                             ViewBag.InfoDocs = "Brak dokumentów przypisanych do sprawy";
                         }
                     }
                     else
                     {
-                        
+
                         ViewBag.InfoDocs = "Brak dokumentów przypisanych do sprawy";
                     }
                 }
             }
             else
             {
-                
+
                 ViewBag.InfoDocs = "Brak dokumentów przypisanych do sprawy";
             }
 

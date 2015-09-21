@@ -140,7 +140,7 @@ namespace Portal.Controllers
         {
             if (disposing)
             {
-                context.Dispose();
+                //context.Dispose();
             }
             base.Dispose(disposing);
         }

@@ -9,27 +9,30 @@
 
 
 @{
-    ViewBag.Title = "NetSettlement";
+    ViewBag.Title = "Rozliczenia sieci";
+    
 }
+
+@Html.Partial("_CommonCaseLinks")
 
 <div class="row">
     <div class="col-md-12">
 
-        <h2><i class="fa fa-money adv-i"></i>Rozliczenia sieci @ViewBag.Client</h2>
+        <h3><i class="fa fa-money adv-i"></i>Rozliczenia sieci @ViewBag.Client</h3>
 
     </div>
 
 </div>
 
-<div class="row">
+@*<div class="row">
     <div class="col-md-12" style="margin-bottom: 20px;">
-        <h2>Wybierz datę:</h2>
+        <h3>Wybierz datę:</h3>
     </div>
-</div>
+</div>*@
 
 
 
-@using (Html.BeginForm())
+@*@using (Html.BeginForm())
 {
 
     Html.Hidden("client", (string)ViewBag.Client);
@@ -52,17 +55,13 @@
 
     <br />
 
-    <div class="row">
-        
+   
 
-    </div>
+}*@
 
-
-}
-
-<h2>
+@*<h3>
     <i class="fa fa-money adv-i"></i>Prowizje
-</h2>
+</h3>*@
 
 @if (count > 0)
 {

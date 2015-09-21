@@ -18,6 +18,12 @@
 
 @{
     int counter = 1;
+    string text = (string)Session["userName"];
+    if (null != Session["account"])
+    {
+        Account account = (Account)Session["account"];
+        text = account.Name;
+    }
 }
 
 
@@ -25,7 +31,7 @@
 
     <div class="col-md-10">
 
-        <h2><i class="fa fa-list adv-i"></i>Lista spraw @Session["userName"]</h2>
+        <h3><i class="fa fa-list adv-i"></i>Lista spraw dla @text</h3>
         
         
 

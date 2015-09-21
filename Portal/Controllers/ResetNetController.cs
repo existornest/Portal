@@ -31,7 +31,7 @@ namespace Portal.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index([Bind(Include = "ID,UserName,Password,ConfirmPassword")] Reset reset)
+        public ActionResult Index([Bind(Include = "ID,UserName,OldPassword,Password,ConfirmPassword")] Reset reset)
         {
             if (ModelState.IsValid)
             {
@@ -58,6 +58,30 @@ namespace Portal.Controllers
                 }
 
                 PasswordHash pHash = PasswordHash.Create(reset.Password);
+
+                PasswordHash pVerify = null;
+
+                try
+                {
+                    pVerify = PasswordHash.Create(user.expl_salt, user.expl_passwordhash);
+
+                }
+                catch
+                {
+                    Session.RemoveAll();
+                    TempData["loginError"] = "Użytkownik nie może w tej chwili resetować hasła.";
+                    Session["loggedUser"] = null;
+                    return RedirectToAction("Index", "Login");
+                }
+
+                if (!pVerify.Verify(reset.OldPassword))
+                {
+                    Session.RemoveAll();
+                    TempData["loginError"] = "Wpisz poprawnie stare hasło.";
+                    Session["loggedUser"] = null;
+                    return RedirectToAction("Index", "Reset");
+                }
+
 
                 string emailGuid = (context.ContactSet
                     .Where(a => a.expl_PortalLogin == reset.UserName)

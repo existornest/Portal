@@ -2,15 +2,17 @@
 @using EarlyBoundTypes
 @using Portal.ViewModels
 @{
-    ViewBag.Title = "Summons";
+    ViewBag.Title = "Pozwy";
     Layout = "~/Views/Shared/_LayoutCase.cshtml";
     int count = Model.list.Count;
 }
 
+@Html.Partial("_CommonCaseLinks")
+
 <div class="row">
 
     <div class="col-md-12">
-        <h2><i class="fa fa-caret-square-o-down adv-i"></i>Pozwy, @Model.Client</h2>
+        <h3><i class="fa fa-caret-square-o-down adv-i"></i>Pozwy, @Model.Client</h3>
 
     </div>
 
